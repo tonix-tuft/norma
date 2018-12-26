@@ -1,0 +1,7 @@
+nbproject/**
+!nbproject/project.properties
+!nbproject/project.xml
+vendor/
+.DS_Store
+composer.lock
+phpunit.xml
