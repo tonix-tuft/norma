@@ -113,7 +113,7 @@ class Norma {
         static $appDir = null;
         if (is_null($appDir)) {
             $currentDir = __DIR__;
-            while (!file_exists($currentDir . '/norma')) {
+            while (!file_exists($currentDir . '/vendor')) {
                 $currentDir = dirname($currentDir);
             }
             $appDir = $currentDir;
