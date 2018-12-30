@@ -32,12 +32,12 @@ use Norma\Core\Utils\FrameworkUtils;
 use Norma\Core\Parsing\UseStatementsParser;
 use Norma\DI\{AbstractDependencyInjectionContainer, DependencyInjectionContainer};
 use Norma\IPC\FlockSync;
-use Norma\Core\Autoloading\AutoloaderInterface;
 use Norma\Core\Env\EnvInterface;
 use Norma\Middleware\MiddlewareLayerInterface;
 use Norma\Middleware\MiddlewareLayerEnum;
 use Norma\Middleware\MiddlewareLayerExecutorTrait;
 use Norma\Core\Oops\ErrorCapturerInterface;
+use Composer\Autoload\ClassLoader;
 
 /**
  * The abstract base class for Norma application's runtimes.
@@ -54,7 +54,7 @@ abstract class AbstractRuntime implements RuntimeInterface {
     protected $env;
     
     /**
-     * @var AutoloaderInterface 
+     * @var ClassLoader 
      */
     protected $autoloader;
     
@@ -97,10 +97,10 @@ abstract class AbstractRuntime implements RuntimeInterface {
      * Constructs a new runtime.
      * 
      * @param EnvInterface $env The environment.
-     * @param AutoloaderInterface $autoloader An autoloader.
+     * @param ClassLoader $autoloader An autoloader.
      * @param ErrorCapturerInterface $errorHandler An error capturer.
      */
-    public function __construct(EnvInterface $env, AutoloaderInterface $autoloader, ErrorCapturerInterface $errorHandler) {
+    public function __construct(EnvInterface $env, ClassLoader $autoloader, ErrorCapturerInterface $errorHandler) {
         $this->env = $env;
         $this->autoloader = $autoloader;
         $this->errorHandler = $errorHandler;
@@ -182,15 +182,6 @@ abstract class AbstractRuntime implements RuntimeInterface {
         /*** 1. Framework and application's composition root bootstrap process ***/
         $container = $this->instantiateContainer();
         $this->configureContainerWithFrameworkConfig($container);
-        
-        /*
-         * Only when we have at least the framework's container then we autoload the client's names.
-         * This is because we want to catch every possible error which may arise from client's code and have a container
-         * instance already created.
-         */
-        $appAutoloadFilename = $this->normaDir . '/app/autoload/autoload.php';
-        $namespaces = require_once $appAutoloadFilename; // Application components' autoloading.
-        $this->autoloader->addNamespaces(...$namespaces);
 
         /*
          * Application's DI configuration.

@@ -31,9 +31,9 @@ use Norma\Core\Runtime\RuntimeEnum;
 use Norma\Core\Runtime\RuntimeInterface;
 use Norma\Core\Runtime\CLIApplicationRuntime;
 use Norma\Core\Runtime\WebApplicationRuntime;
-use Norma\Core\Autoloading\AutoloaderInterface;
 use Norma\Core\Oops\ErrorCapturerInterface;
 use Norma\Core\Oops\ErrorCapturer;
+use Composer\Autoload\ClassLoader;
 
 /**
  * A class which has static as well as instance helper methods used by the framework.
@@ -170,11 +170,11 @@ class Norma {
      * runtime given a runtime identifier and an environment.
      * 
      * @param string $runtime The identifier of the runtime to create.
-     * @param AutoloaderInterface $autoloader An autoloader.
+     * @param ClassLoader $autoloader An autoloader.
      * @return RuntimeInterface The created runtime.
      * @throws \RuntimeException If the runtime to create is not the runtime the application is being executed with.
      */
-    public function makeRuntime($runtime, AutoloaderInterface $autoloader): RuntimeInterface {
+    public function makeRuntime($runtime, ClassLoader $autoloader): RuntimeInterface {
         static::assertRuntime($runtime);
         
         $env = $this->makeEnv();
