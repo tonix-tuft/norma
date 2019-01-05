@@ -68,9 +68,9 @@ abstract class AbstractDependencyInjectionContainer implements DependencyInjecti
     const VALID_PHP_VAR_NAME_REGEX = '[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*';
     
     /**
-     * A separator character used internally to identify recursion of a resolving dependency.
+     * A separator character used internally to identify circular dependencies.
      */
-    const RECURSION_IDENTIFICATION_SEPARATOR = '~';
+    const CIRCULAR_DEPENDENCY_IDENTIFICATION_SEPARATOR = '~';
     
     /**
      * A character used as a separator for qualified components names.
@@ -90,7 +90,7 @@ abstract class AbstractDependencyInjectionContainer implements DependencyInjecti
     /**
      * @var array
      */
-    protected $recursionIdentification = [];
+    protected $circularDependencyIdentification = [];
     
     /**
      * @var array
@@ -308,7 +308,7 @@ abstract class AbstractDependencyInjectionContainer implements DependencyInjecti
      */
     protected function initClientAccess() {
         $this->pendingClientGetIdentifier++;
-        $this->recursionIdentification[$this->pendingClientGetIdentifier] = [];
+        $this->circularDependencyIdentification[$this->pendingClientGetIdentifier] = [];
         $this->contextualBindingsStacks[$this->pendingClientGetIdentifier] = new \SplStack();
         
         // First context is always NULL, as this method is called within a method which is called from the client's code.
@@ -369,7 +369,7 @@ abstract class AbstractDependencyInjectionContainer implements DependencyInjecti
      * @param string|null $componentOfComponent Optional. Specifies the component of the current resolvable `$component` which is resolved directly through contextual
      *                                                                           binding. This parameter is set when the a component is retrieved internally through this method from `$this->contextualBindings`.
      * @return mixed The component.
-     * @throws DependencyInjectionException If a recursive dependency is found or the component cannot be obtained for some reason.
+     * @throws DependencyInjectionException If a circular dependency is found or the component cannot be obtained for some reason.
      */
     protected function getInternally($component, $componentOfComponent = NULL) {
         /*
@@ -416,9 +416,9 @@ abstract class AbstractDependencyInjectionContainer implements DependencyInjecti
             }
 
             /*
-             * We identify recursion only for those components which cannot be resolved rightaway,
+             * We identify circular dependency only for those components which cannot be resolved rightaway,
              * because otherwise if `$component` is a component resolvable through {@link AbstractDependencyInjectionContainer::resolve()},
-             * if we even had a component which causes recursion, we would identify while resolving it and not at the point when `$component` is:
+             * if we even had a component which causes circular dependency, we would identify while resolving it and not at the point when `$component` is:
              * 
              *      - An instance of a class which implements the {@link DependencyInjectionContainerComponentInterface} interface;
              * Or:
@@ -428,55 +428,55 @@ abstract class AbstractDependencyInjectionContainer implements DependencyInjecti
              * Or:
              *      - A primitive value or another PHP type used as-is;
              */
-            $this->identifyRecursion($normalizedComponent);
+            $this->identifyCircularDependency($normalizedComponent);
         }
 
         return $this->getFromConfig($componentToEventuallyGet, $componentToResolveDirectly);
     }
     
     /**
-     * Identifies recursion and throws an exception in case there's one.
+     * Identifies circular dependency and throws an exception in case there's one.
      * 
      * @param string $normalizedComponent The searched component.
      * @return void
-     * @throws DependencyInjectionException If a recursion is found.
+     * @throws DependencyInjectionException If a circular dependency is found.
      */
-    protected function identifyRecursion($normalizedComponent) {
-        $recursionIdentificationComponent = $normalizedComponent;
+    protected function identifyCircularDependency($normalizedComponent) {
+        $circularDependencyIdentificationComponent = $normalizedComponent;
         
         $currentBindingContext = $this->getCurrentBindingContext();
         if (!is_null($currentBindingContext)
             &&
-            $this->getFrameworkUtils()->arrayKeysExist($this->contextualBindings, $currentBindingContext, $recursionIdentificationComponent)
+            $this->getFrameworkUtils()->arrayKeysExist($this->contextualBindings, $currentBindingContext, $circularDependencyIdentificationComponent)
         ) {
-            $recursionIdentificationComponent = $this->getComponentFromResolvable($this->contextualBindings[$currentBindingContext][$recursionIdentificationComponent]);
+            $circularDependencyIdentificationComponent = $this->getComponentFromResolvable($this->contextualBindings[$currentBindingContext][$circularDependencyIdentificationComponent]);
         }
-        else if (array_key_exists($recursionIdentificationComponent, $this->config)) {
-            $recursionIdentificationComponent = $this->config[$recursionIdentificationComponent];
-            if ($recursionIdentificationComponent instanceof DependencyInjectionContainerComponentInterface) {
-                $recursionIdentificationComponent = $this->getComponentFromResolvable($recursionIdentificationComponent);
+        else if (array_key_exists($circularDependencyIdentificationComponent, $this->config)) {
+            $circularDependencyIdentificationComponent = $this->config[$circularDependencyIdentificationComponent];
+            if ($circularDependencyIdentificationComponent instanceof DependencyInjectionContainerComponentInterface) {
+                $circularDependencyIdentificationComponent = $this->getComponentFromResolvable($circularDependencyIdentificationComponent);
             }
         }
         
-        $componentWhichMayCauseRecursion = $normalizedComponent;
-        if (is_string($recursionIdentificationComponent) && class_exists($recursionIdentificationComponent)) {
+        $componentWhichMayCauseCircularDependency = $normalizedComponent;
+        if (is_string($circularDependencyIdentificationComponent) && class_exists($circularDependencyIdentificationComponent)) {
             // If the leaf component is an existent class, that specific class together with its component prepended 
-            // will be used as the key to identify recursion. This lets the container to handle potential recursion cases
+            // will be used as the key to identify circular dependency. This lets the container to handle potential circular dependency cases
             // which can be resolved with different implementations thanks to contextual bindings
             // when the same interface or abstract class is needed more than once.
-            $recursionIdentificationComponent = $normalizedComponent . self::RECURSION_IDENTIFICATION_SEPARATOR . $recursionIdentificationComponent;
+            $circularDependencyIdentificationComponent = $normalizedComponent . self::CIRCULAR_DEPENDENCY_IDENTIFICATION_SEPARATOR . $circularDependencyIdentificationComponent;
         }
         else {
-            $recursionIdentificationComponent = $normalizedComponent;
+            $circularDependencyIdentificationComponent = $normalizedComponent;
         }
         
-        if (empty($this->recursionIdentification[$this->pendingClientGetIdentifier][$recursionIdentificationComponent])) {
-            $this->recursionIdentification[$this->pendingClientGetIdentifier][$recursionIdentificationComponent] = 0;
+        if (empty($this->circularDependencyIdentification[$this->pendingClientGetIdentifier][$circularDependencyIdentificationComponent])) {
+            $this->circularDependencyIdentification[$this->pendingClientGetIdentifier][$circularDependencyIdentificationComponent] = 0;
         }
-        $this->recursionIdentification[$this->pendingClientGetIdentifier][$recursionIdentificationComponent]++;
+        $this->circularDependencyIdentification[$this->pendingClientGetIdentifier][$circularDependencyIdentificationComponent]++;
         
-        if ($this->recursionIdentification[$this->pendingClientGetIdentifier][$recursionIdentificationComponent] > 1) {
-            throw new DependencyInjectionException(sprintf('Recursive dependency for component "%1$s".', $componentWhichMayCauseRecursion));
+        if ($this->circularDependencyIdentification[$this->pendingClientGetIdentifier][$circularDependencyIdentificationComponent] > 1) {
+            throw new DependencyInjectionException(sprintf('Circular dependency for component "%1$s".', $componentWhichMayCauseCircularDependency));
         }
     }
     
