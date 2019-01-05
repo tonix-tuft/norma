@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (c) 2018 Anton Bagdatyev
+ * Copyright (c) 2019 Anton Bagdatyev (Tonix-Tuft)
  * 
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -32,6 +32,6 @@ use Norma\HTTP\HTTPException;
 /**
  * An exception to throw if the headers of a response had already been sent.
  *
- * @author Tonix-Tuft <antonytuft@gmail.com>
+ * @author Anton Bagdatyev (Tonix-Tuft) <antonytuft@gmail.com>
  */
 class HeadersAlreadySentException extends HTTPException {}

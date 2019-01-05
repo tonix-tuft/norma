@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (c) 2018 Anton Bagdatyev
+ * Copyright (c) 2019 Anton Bagdatyev (Tonix-Tuft)
  * 
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -32,7 +32,7 @@ use Norma\Core\Oops\ExceptionInterface;
 /**
  * An abstract error exception of the Norma's framework.
  *
- * @author Tonix-Tuft <antonytuft@gmail.com>
+ * @author Anton Bagdatyev (Tonix-Tuft) <antonytuft@gmail.com>
  */
 class AbstractErrorException extends \ErrorException implements ExceptionInterface {
     

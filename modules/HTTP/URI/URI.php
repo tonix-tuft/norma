@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (c) 2018 Anton Bagdatyev
+ * Copyright (c) 2019 Anton Bagdatyev (Tonix-Tuft)
  * 
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -35,7 +35,7 @@ use Norma\HTTP\SchemeStandardPortMap;
  *
  * @source http://php.net/manual/en/function.parse-url.php#114817
  * 
- * @author Tonix-Tuft <antonytuft@gmail.com>
+ * @author Anton Bagdatyev (Tonix-Tuft) <antonytuft@gmail.com>
  * @author <lauris () lauris ! lv> (http://php.net/manual/en/function.parse-url.php#114817)
  */
 class URI implements UriInterface {

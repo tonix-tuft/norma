@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (c) 2018 Anton Bagdatyev
+ * Copyright (c) 2019 Anton Bagdatyev (Tonix-Tuft)
  * 
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -30,7 +30,7 @@ namespace Norma\DI;
 /**
  * The interface of a DI container used within the Norma framework.
  * 
- * @author Tonix-Tuft <antonytuft@gmail.com>
+ * @author Anton Bagdatyev (Tonix-Tuft) <antonytuft@gmail.com>
  */
 interface DependencyInjectionContainerInterface {
     

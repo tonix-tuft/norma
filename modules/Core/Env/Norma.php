@@ -1,7 +1,7 @@
 <?php
 
 /* 
- * Copyright (c) 2018 Anton Bagdatyev
+ * Copyright (c) 2019 Anton Bagdatyev (Tonix-Tuft)
  * 
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -41,6 +41,8 @@ use Composer\Autoload\ClassLoader;
  * Client's code SHOULD NOT rely on this component within their own implementations, because it SHOULD only be used by the framework.
  * However, the client's code MAY use the methods provided by this component within the environment configuration in order to expose environment variables
  * to the {@link Norma\Core\Env\EnvInterface} component and use that component within the other configuration files.
+ * 
+ * @author Anton Bagdatyev (Tonix-Tuft) <antonytuft@gmail.com>
  */
 class Norma {
     

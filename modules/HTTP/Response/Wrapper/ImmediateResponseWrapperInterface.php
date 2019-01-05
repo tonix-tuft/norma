@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (c) 2018 Anton Bagdatyev
+ * Copyright (c) 2019 Anton Bagdatyev (Tonix-Tuft)
  * 
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -31,6 +31,6 @@ namespace Norma\HTTP\Response\Wrapper;
  * A tag (marker) interface for an immediate response wrapper, i.e. a response which MUST be sent straight away to the client
  * as soon as a middleware returns it.
  *
- * @author Tonix-Tuft <antonytuft@gmail.com>
+ * @author Anton Bagdatyev (Tonix-Tuft) <antonytuft@gmail.com>
  */
 interface ImmediateResponseWrapperInterface extends ResponseWrapperInterface {}
