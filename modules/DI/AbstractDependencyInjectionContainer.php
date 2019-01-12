@@ -824,7 +824,6 @@ abstract class AbstractDependencyInjectionContainer implements DependencyInjecti
     protected function parseComponentsFromReflectionFunctionAbstractAnnotations(\ReflectionFunctionAbstract $reflectionFuncOrMethod) {
         // Sample Regexes:
         // 
-        //     https://regex101.com/r/fv1J17/11 -> Trying to do everything with a single regex (abandoned).
         //     https://regex101.com/r/Nut9AP/2 -> For splitting params.
         //     https://regex101.com/r/Nut9AP/3 -> For splitting inject annotations.
         //     https://regex101.com/r/fiKGSc/3 -> For a single inject annotation parse through param annotation. Gives variable name.
