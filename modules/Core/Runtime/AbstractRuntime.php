@@ -38,6 +38,7 @@ use Norma\Middleware\MiddlewareLayerEnum;
 use Norma\Middleware\MiddlewareLayerExecutorTrait;
 use Norma\Core\Oops\ErrorCapturerInterface;
 use Composer\Autoload\ClassLoader;
+use Norma\AOP\Autoloading\AOPAutoloaderWrapperFactoryInterface;
 
 /**
  * The abstract base class for Norma application's runtimes.
@@ -52,11 +53,6 @@ abstract class AbstractRuntime implements RuntimeInterface {
      * @var EnvInterface
      */
     protected $env;
-    
-    /**
-     * @var ClassLoader 
-     */
-    protected $autoloader;
     
     /**
      * @var string
@@ -97,12 +93,10 @@ abstract class AbstractRuntime implements RuntimeInterface {
      * Constructs a new runtime.
      * 
      * @param EnvInterface $env The environment.
-     * @param ClassLoader $autoloader An autoloader.
      * @param ErrorCapturerInterface $errorHandler An error capturer.
      */
-    public function __construct(EnvInterface $env, ClassLoader $autoloader, ErrorCapturerInterface $errorHandler) {
+    public function __construct(EnvInterface $env, ErrorCapturerInterface $errorHandler) {
         $this->env = $env;
-        $this->autoloader = $autoloader;
         $this->errorHandler = $errorHandler;
         
         $this->normaDir = $this->env->get('NORMA_APP_DIR') . '/norma';
@@ -180,6 +174,29 @@ abstract class AbstractRuntime implements RuntimeInterface {
          */
 
         /*** 1. Framework and application's composition root bootstrap process ***/
+        $container = $this->configureContainer();
+        /*** /1. ***/
+        
+        /*** 2. AOP layer ***/
+        /*
+         * As soon as there's the container, the AOP layer is configured.
+         */
+        $this->configureAOPLayer($container);
+        /*** /2. ***/
+        
+        /*** 3. Middlewares bootstrap process ***/
+        $this->configureMiddlewares($container);
+        /*** /3. ***/
+        
+        return $container;
+    }
+    
+    /**
+     * Configures the DI container and returns it.
+     * 
+     * @return AbstractDependencyInjectionContainer The DI container.
+     */
+    protected function configureContainer() {
         $container = $this->instantiateContainer();
         $this->configureContainerWithFrameworkConfig($container);
 
@@ -204,11 +221,6 @@ abstract class AbstractRuntime implements RuntimeInterface {
         else {
             unset($trueContainer);
         }
-        /*** /1. ***/
-        
-        /*** 2. Middlewares bootstrap process ***/
-        $this->configureMiddlewares($container);
-        /*** /2. ***/
         
         return $container;
     }
@@ -295,7 +307,7 @@ abstract class AbstractRuntime implements RuntimeInterface {
      * Registers the middlewares for the given middleware layer.
      * 
      * @param AbstractDependencyInjectionContainer $container The DI container.
-     * @param MiddlewareLayerInterface $middlewareLayer The middleware layer instance where to use to register the middlewares.
+     * @param MiddlewareLayerInterface $middlewareLayer The middleware layer instance where to register the middlewares.
      * @param string $configFile The configuration file of the middlewares.
      * @param bool $skipIfConfigFileDoesNotExist A boolean indicating whether to skip or not to skip if the given configuration file does not exist (the default value is not to skip).
      * @param bool $override Whether to override the same middleware layer with the given middlewares of not.
@@ -315,9 +327,85 @@ abstract class AbstractRuntime implements RuntimeInterface {
     }
     
     /**
+     * Configures the AOP layer of the application.
+     * 
+     * @param AbstractDependencyInjectionContainer $container The DI container.
+     * @return void
+     */
+    protected function configureAOPLayer(AbstractDependencyInjectionContainer $container) {
+        /*
+         * Steps of AOP layer configuration:
+         * 
+         * 1) Registering the autoloader wrapper;
+         * 
+         * 2) Registering the aspect weaver;
+         * 
+         * 3) Registering all the aspects;
+         */
+        $this->registerAOPAutoloaderWrapper($container);
+        $this->registerAspectWeaver();
+        $this->registerAspects();
+    }
+    
+    /**
+     * Registers the AOP autoloader wrapper.
+     * 
+     * @param AbstractDependencyInjectionContainer $container The DI container.
+     * @return void
+     * @throws 
+     */
+    protected function registerAOPAutoloaderWrapper(AbstractDependencyInjectionContainer $container) {
+        // TODO: review
+        $atLeastOneClassLoaderWasWrapped = FALSE;
+        $registeredAutoloaders = spl_autoload_functions() ?? [];
+        $autoloadersToReregister = [];
+        foreach ($registeredAutoloaders as $registeredAutoloader) {
+            $registeredAutoloaderToUnregister = $registeredAutoloader;
+            if (is_array($registeredAutoloader) && ($registeredAutoloader[0] instanceof ClassLoader)) {
+                $classLoader = $registeredAutoloader[0];
+                $factory = $container->get(AbstractDependencyInjectionContainer::buildQualifiedComponentKey(['norma', 'framework', 'aop', AOPAutoloaderWrapperFactoryInterface::class]));
+                $autoloader = $factory->makeAOPAutoloaderWrapper($classLoader);
+                $registeredAutoloader[0] = $autoloader;
+                $atLeastOneClassLoaderWasWrapped = TRUE;
+            }
+            $autoloadersToReregister[] = $registeredAutoloader;
+            
+            spl_autoload_unregister($registeredAutoloaderToUnregister);
+        }
+        
+        foreach ($autoloadersToReregister as $autoloaderToReregister) {
+            spl_autoload_register($autoloaderToReregister);
+        }
+        
+        if (!$atLeastOneClassLoaderWasWrapped) {
+            throw new \RuntimeException(sprintf('No class loader of type "%s" was found when registering the AOP autoloader wrapper.', ClassLoader::class));
+        }
+    }
+    
+    /**
+     * Registers the aspect weaver.
+     * 
+     * @return void
+     */
+    protected function registerAspectWeaver() {
+        // TODO: implement
+        
+    }
+    
+    /**
+     * Registers the aspects of the AOP layer.
+     * 
+     * @return void
+     */
+    protected function registerAspects() {
+        // TODO: implement
+        
+    }
+    
+    /**
      * Configures the generic middlewares.
      * 
-     * @param AbstractDependencyInjectionContainer $container The DI container
+     * @param AbstractDependencyInjectionContainer $container The DI container.
      * @return void
      */
     protected function configureMiddlewares(AbstractDependencyInjectionContainer $container) {
@@ -363,7 +451,7 @@ abstract class AbstractRuntime implements RuntimeInterface {
     
     /**
      * A hook called whenever the application is completing its execution.
-     * This is a good hook for after middlewares.
+     * This is a good hook for executing after middlewares.
      * 
      * @param AbstractDependencyInjectionContainer $container The DI container.
      * @return void

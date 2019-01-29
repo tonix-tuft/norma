@@ -59,7 +59,7 @@ class Norma {
             }
             else {
                 $environment = require static::appDir() . '/norma/environment.php';
-            }   
+            }
         }
         return $environment;
     }
@@ -114,7 +114,8 @@ class Norma {
     public static function appDir() {
         static $appDir = null;
         if (is_null($appDir)) {
-            $currentDir = __DIR__;
+            $classLoaderReflection = new \ReflectionClass(ClassLoader::class);
+            $currentDir = dirname($classLoaderReflection->getFileName());
             while (!file_exists($currentDir . '/vendor')) {
                 $currentDir = dirname($currentDir);
             }
@@ -172,21 +173,20 @@ class Norma {
      * runtime given a runtime identifier and an environment.
      * 
      * @param string $runtime The identifier of the runtime to create.
-     * @param ClassLoader $autoloader An autoloader.
      * @return RuntimeInterface The created runtime.
      * @throws \RuntimeException If the runtime to create is not the runtime the application is being executed with.
      */
-    public function makeRuntime($runtime, ClassLoader $autoloader): RuntimeInterface {
+    public function makeRuntime($runtime): RuntimeInterface {
         static::assertRuntime($runtime);
         
         $env = $this->makeEnv();
         $errorHandler = $this->makeErrorCapturer();
         
         if ($runtime === RuntimeEnum::CLI) {
-            return new CLIApplicationRuntime($env, $autoloader, $errorHandler);
+            return new CLIApplicationRuntime($env, $errorHandler);
         }
         else {
-            return new WebApplicationRuntime($env, $autoloader, $errorHandler);
+            return new WebApplicationRuntime($env, $errorHandler);
         }
     }
     

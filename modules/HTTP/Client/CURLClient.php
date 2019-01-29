@@ -166,7 +166,8 @@ class CURLClient implements ClientInterface {
      * @return ResponseInterface The response.
      */
     protected function parseResponse($response) {
-        // TODO
+        // TODO: implement
+        
     }
     
     /**
