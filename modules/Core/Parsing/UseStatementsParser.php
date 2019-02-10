@@ -112,7 +112,7 @@ HERECODE;
             }, $this, self::class);
             
             $lockFile = self::PARSING_LOCK_DIR . DIRECTORY_SEPARATOR . $filenameWithoutExtensionToCheck;
-            $fileContents = getmygid() . ':' . $filename . ':' . $namespaceTrim;
+            $fileContents = getmypid() . ':' . $filename . ':' . $namespaceTrim;
             $this->flockSync->synchronize($lockFile, $closureSync, $fileContents, TRUE);
         }
         else {

@@ -249,7 +249,7 @@ class DependencyInjectionContainer extends AbstractDependencyInjectionContainer 
                 eval($dynProxyClassCode);
             }, $this, self::class);
             
-            $fileContents = getmygid() . ':' . $FQDynProxyClassName;
+            $fileContents = getmypid() . ':' . $FQDynProxyClassName;
             $lockFile = self::CACHE_DYN_PROXY_LOCK_DIR . DIRECTORY_SEPARATOR . self::DYN_PROXY_FILE_OPERATION_LOCK_FILE_NAME_PREFIX . sha1($FQDynProxyClassName);
             $this->flock->synchronize($lockFile, $closureSync, $fileContents, TRUE, $closureNonBlocking);
         }
@@ -409,14 +409,18 @@ HERECODE;
             }
             
             $modifiers = implode(' ', \Reflection::getModifierNames($reflectionMethod->getModifiers() & ~(\ReflectionMethod::IS_ABSTRACT)));
-            $returnByRef = $reflectionMethod->returnsReference() ? "&" : "";
+            $returnByRef = $reflectionMethod->returnsReference() ? '&' : '';
             
             $methodParamsDef = [];
             $methodCallParams = [];
             $reflectionParameters = $reflectionMethod->getParameters();
             foreach ($reflectionParameters as $reflectionParameter) {
+                /* @var $reflectionParameter \ReflectionParameter */
                 $reflectionParameterName = $reflectionParameter->getName();
-                $methodCallParams[] = '$' . $reflectionParameterName;
+                
+                $isVariadic = $reflectionParameter->isVariadic();
+                
+                $methodCallParams[] = ($isVariadic ? '...' : '') . '$' . $reflectionParameterName;
                 
                 if ($reflectionParameter->isArray()) {
                     $type = 'array ';
@@ -437,11 +441,12 @@ HERECODE;
                 catch (\ReflectionException $e) {
                     $defaultValue = null;
                 }
-
+                
                 $methodParamsDef[] = $type .
                         ($reflectionParameter->isPassedByReference() ? '&' : '') .
+                        ($isVariadic ? '...' : '') .
                         '$' . $reflectionParameterName .
-                        ($reflectionParameter->isOptional() ? '=' . var_export($defaultValue, TRUE) : '');
+                        ($reflectionParameter->isOptional() && !$isVariadic ? '=' . var_export($defaultValue, TRUE) : '');
             }
             
             $methodParamsDefCodeStr = implode(', ', $methodParamsDef);
@@ -465,7 +470,7 @@ HERECODE;
             }
             else {
                 $methodCodeArray[] = <<<HERECODE
-    $modifiers function $returnByRef $methodName($methodParamsDefCodeStr){$returnType} {
+    $modifiers function $returnByRef$methodName($methodParamsDefCodeStr){$returnType} {
 HERECODE;
                     if ($reflectionMethod->isStatic()) {
                         // Static method.

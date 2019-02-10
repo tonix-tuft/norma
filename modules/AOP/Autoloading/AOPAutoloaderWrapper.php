@@ -35,7 +35,7 @@ use Composer\Autoload\ClassLoader;
  *
  * @author Anton Bagdatyev (Tonix-Tuft) <antonytuft@gmail.com>
  */
-class AOPAutoloaderWrapper implements AOPAutoloaderWrapperInterface {
+class AOPAutoloaderWrapper extends ClassLoader implements AOPAutoloaderWrapperInterface {
     
     /**
      * @var ClassLoader
@@ -71,5 +71,10 @@ class AOPAutoloaderWrapper implements AOPAutoloaderWrapperInterface {
  * @param string $file Filename to include.
  */
 function includeFile($file) {
-    include $file;
+    if (function_exists('Composer\Autoload\includeFile')) {
+        \Composer\Autoload\includeFile($file);
+    }
+    else {
+        include $file;
+    }
 }
