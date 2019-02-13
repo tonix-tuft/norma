@@ -285,18 +285,22 @@ class DependencyInjectionContainer extends AbstractDependencyInjectionContainer 
         $containerReflectionName = $containerReflection->getName();
         $codeArray[] = <<<HERECODE
 <?php
-
+HERECODE;
+        $codeArray[] = <<<HERECODE
 namespace $namespace;
-
-use {$containerReflectionName};
 HERECODE;
 
+        $useStatementsCodeArray = [
+            "use {$containerReflectionName};"
+        ];
+        
         $reflectionClassName = $reflectionClass->getName();
         if ($reflectionClassName !== $containerReflectionName) {
-            $codeArray[] = <<<HERECODE
-use {$reflectionClassName};
-HERECODE;
+            $useStatementsCodeArray[] = "use {$reflectionClassName};";
         }
+        
+        $codeArray[] = implode("\n", $useStatementsCodeArray);
+        
         $codeArray[] = <<<HERECODE
 class $dynProxyBasenameWithoutExtension extends {$classShortName} {
 
@@ -528,7 +532,7 @@ HERECODE;
             case '__call':
                 $modifiers = is_null($modifiers) ? 'public' : $modifiers;
                 $methodCode = <<<HERECODE
-    $modifiers function $returnByRef $methodName(\$name, \$arguments)$returnType {
+    $modifiers function $returnByRef$methodName(\$name, \$arguments)$returnType {
         \$this->{$lazyInstanceName}Method();
         return \$this->{$lazyInstanceName}Obj->{\$name}(...\$arguments);
 HERECODE;
@@ -536,14 +540,14 @@ HERECODE;
             case '__callStatic': // static
                 $modifiers = is_null($modifiers) ? 'public static' : $modifiers;
                 $methodCode = <<<HERECODE
-    $modifiers function $returnByRef $methodName(\$name, \$arguments)$returnType {
+    $modifiers function $returnByRef$methodName(\$name, \$arguments)$returnType {
         return {$classShortName}::{\$name}(...\$arguments);
 HERECODE;
                 break;
             case '__clone':
                 $modifiers = is_null($modifiers) ? 'public' : $modifiers;
                 $methodCode = <<<HERECODE
-    $modifiers function $returnByRef $methodName()$returnType {
+    $modifiers function $returnByRef$methodName()$returnType {
         \$this->{$lazyInstanceName}Method();
         \$this->{$lazyInstanceName}Obj = clone \$this->{$lazyInstanceName}Obj;
 HERECODE;
@@ -564,7 +568,7 @@ HERECODE;
      *      https://github.com/cakephp/chronos/issues/164#issuecomment-376905110
      * 
      */
-    $modifiers function $returnByRef $methodName()$returnType {
+    $modifiers function $returnByRef$methodName()$returnType {
         \$this->{$lazyInstanceName}Method();
         if (method_exists(\$this->{$lazyInstanceName}Obj, '__debugInfo')) {
             var_dump(\$this->{$lazyInstanceName}Obj);
@@ -587,7 +591,7 @@ HERECODE;
             case '__destruct':
                 $modifiers = is_null($modifiers) ? 'public' : $modifiers;
                 $methodCode = <<<HERECODE
-    $modifiers function $returnByRef $methodName()$returnType {
+    $modifiers function $returnByRef$methodName()$returnType {
         if (!is_null(\$this->{$lazyInstanceName}Obj)) {
             \$this->{$lazyInstanceName}Obj = NULL;
         }
@@ -596,7 +600,7 @@ HERECODE;
             case '__get':
                 $modifiers = is_null($modifiers) ? 'public' : $modifiers;
                 $methodCode = <<<HERECODE
-    $modifiers function $returnByRef $methodName(\$name)$returnType {
+    $modifiers function $returnByRef$methodName(\$name)$returnType {
         \$this->{$lazyInstanceName}Method();
         return \$this->{$lazyInstanceName}Obj->\$name;
 HERECODE;
@@ -604,7 +608,7 @@ HERECODE;
             case '__invoke':
                 $modifiers = is_null($modifiers) ? 'public' : $modifiers;
                 $methodCode = <<<HERECODE
-    $modifiers function $returnByRef $methodName($methodParamsDefCodeStr)$returnType {
+    $modifiers function $returnByRef$methodName($methodParamsDefCodeStr)$returnType {
         \$this->{$lazyInstanceName}Method();
         \$obj = \$this->{$lazyInstanceName}Obj;
         return \$obj($methodCallParamsCodeStr);
@@ -613,7 +617,7 @@ HERECODE;
             case '__isset':
                 $modifiers = is_null($modifiers) ? 'public' : $modifiers;
                 $methodCode = <<<HERECODE
-    $modifiers function $returnByRef $methodName(\$name)$returnType {
+    $modifiers function $returnByRef$methodName(\$name)$returnType {
         \$this->{$lazyInstanceName}Method();
         return isset(\$this->{$lazyInstanceName}Obj->{\$name});
 HERECODE;
@@ -621,7 +625,7 @@ HERECODE;
             case '__set':
                 $modifiers = is_null($modifiers) ? 'public' : $modifiers;
                 $methodCode = <<<HERECODE
-    $modifiers function $returnByRef $methodName(\$name, \$value)$returnType {
+    $modifiers function $returnByRef$methodName(\$name, \$value)$returnType {
         \$this->{$lazyInstanceName}Method();
         \$this->{$lazyInstanceName}Obj->{\$name} = \$value;
 HERECODE;
@@ -629,14 +633,14 @@ HERECODE;
             case '__set_state': // static
                 $modifiers = is_null($modifiers) ? 'public static' : $modifiers;
                 $methodCode = <<<HERECODE
-    $modifiers function $returnByRef $methodName(\$properties)$returnType {
+    $modifiers function $returnByRef$methodName(\$properties)$returnType {
         return {$classShortName}::{$methodName}(\$properties);
 HERECODE;
                 break;
             case '__sleep':
                 $modifiers = is_null($modifiers) ? 'public' : $modifiers;
                 $methodCode = <<<HERECODE
-    $modifiers function $returnByRef $methodName($methodParamsDefCodeStr)$returnType {
+    $modifiers function $returnByRef$methodName($methodParamsDefCodeStr)$returnType {
         \$this->{$lazyInstanceName}Method();
         \$this->{$lazyInstanceName}Serialization = serialize(\$this->{$lazyInstanceName}Obj);
         return \array_merge(parent::__sleep(),
@@ -651,7 +655,7 @@ HERECODE;
             case '__toString':
                 $modifiers = is_null($modifiers) ? 'public' : $modifiers;
                 $methodCode = <<<HERECODE
-    $modifiers function $returnByRef $methodName($methodParamsDefCodeStr)$returnType {
+    $modifiers function $returnByRef$methodName($methodParamsDefCodeStr)$returnType {
         \$this->{$lazyInstanceName}Method();
         return (string)\$this->{$lazyInstanceName}Obj;
 HERECODE;
@@ -659,7 +663,7 @@ HERECODE;
             case '__unset':
                 $modifiers = is_null($modifiers) ? 'public' : $modifiers;
                 $methodCode = <<<HERECODE
-    $modifiers function $returnByRef $methodName(\$name)$returnType {
+    $modifiers function $returnByRef$methodName(\$name)$returnType {
         \$this->{$lazyInstanceName}Method();
         unset(\$this->{$lazyInstanceName}Obj->{\$name});
 HERECODE;
@@ -667,7 +671,7 @@ HERECODE;
             case '__wakeup':
                 $modifiers = is_null($modifiers) ? 'public' : $modifiers;
                 $methodCode = <<<HERECODE
-    $modifiers function $returnByRef $methodName($methodParamsDefCodeStr)$returnType {
+    $modifiers function $returnByRef$methodName($methodParamsDefCodeStr)$returnType {
         \$this->{$lazyInstanceName}Init();
         \$this->{$lazyInstanceName}Method();
 HERECODE;
