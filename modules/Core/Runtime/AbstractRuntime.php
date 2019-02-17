@@ -342,9 +342,9 @@ abstract class AbstractRuntime implements RuntimeInterface {
          * 
          * 3) Registering all the aspects;
          */
+        $this->registerAspects();
         $this->registerAOPAutoloaderWrapper($container);
         $this->registerAspectWeaver();
-        $this->registerAspects();
     }
     
     /**

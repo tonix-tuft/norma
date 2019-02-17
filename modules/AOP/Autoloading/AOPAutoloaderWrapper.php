@@ -28,6 +28,8 @@
 namespace Norma\AOP\Autoloading;
 
 use Norma\AOP\Autoloading\AOPAutoloaderWrapperInterface;
+use Norma\AOP\FS\AOPEligiblePathDeterminerInterface;
+use Norma\AOP\Stream\AOPFilenameStreamFilterRewriterInterface;
 use Composer\Autoload\ClassLoader;
 
 /**
@@ -43,24 +45,62 @@ class AOPAutoloaderWrapper extends ClassLoader implements AOPAutoloaderWrapperIn
     protected $classLoader;
     
     /**
+     * @var AOPEligiblePathDeterminerInterface
+     */
+    protected $AOPEligiblePathDeterminer;
+    
+    /**
+     * @var AOPFilenameStreamFilterRewriterInterface
+     */
+    protected $AOPFilenameStreamFilterRewriter;
+    
+    /**
      * Constructs a new AOP autoloader wrapper.
      * 
-     * @param ClassLoader $classLoader The wrapped class loader.
+     * @param ClassLoader $classLoader The Composer's class loader.
+     * @param AOPEligiblePathDeterminerInterface $AOPEligiblePathDeterminer An AOP eligible path determiner.
+     * @param AOPFilenameStreamFilterRewriterInterface $AOPFilenameStreamFilterRewriter An AOP filename stream filter rewriter.
      */
-    public function __construct(ClassLoader $classLoader) {
+    public function __construct(ClassLoader $classLoader, AOPEligiblePathDeterminerInterface $AOPEligiblePathDeterminer, AOPFilenameStreamFilterRewriterInterface $AOPFilenameStreamFilterRewriter) {
         $this->classLoader = $classLoader;
+        $this->AOPEligiblePathDeterminer = $AOPEligiblePathDeterminer;
+        $this->AOPFilenameStreamFilterRewriter = $AOPFilenameStreamFilterRewriter;
     }
     
     /**
      * {@inheritdoc}
      */
     public function loadClass($class) {
-        // TODO: complete
         $fileToInclude = $this->classLoader->findFile($class);
         if ($fileToInclude) {
+            $fileToInclude = $this->passThroughAOPLayer($fileToInclude);
             includeFile($fileToInclude);
             return TRUE;
         }
+    }
+    
+    /**
+     * Pass the file to include through the AOP layer.
+     * 
+     * @param string $fileToInclude Path of the file to include.
+     * @return string Path of the file to include.
+     */
+    protected function passThroughAOPLayer($fileToInclude) {
+        $realPath = realpath($fileToInclude);
+        $pathToReturn = $realPath;
+        
+        // TODO: Add cache.
+        
+        if ($this->AOPEligiblePathDeterminer->isPathEligible($pathToReturn)) {
+            static $streamFilterWasRegistered = FALSE;
+            if (!$streamFilterWasRegistered) {
+                $streamFilterWasRegistered = TRUE;
+                $this->AOPFilenameStreamFilterRewriter->register();
+            }
+            $pathToReturn = $this->AOPFilenameStreamFilterRewriter->rewrite($pathToReturn);
+        }
+        
+        return $pathToReturn;
     }
 
 }

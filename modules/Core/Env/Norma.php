@@ -47,7 +47,7 @@ use Composer\Autoload\ClassLoader;
 class Norma {
     
     /**
-     * Returns the name of the Norma application's environment.
+     * Returns the name of the Norma application environment.
      * 
      * @return string A string identifying the environment of the Norma application.
      */
@@ -86,7 +86,7 @@ class Norma {
      * A framework's helper method used to determine the base path of the Norma application.
      * 
      * @param array|null $server Server parameters. Will default to `$_SERVER` if NULL is given.
-     * @return string The Norma application's base path.
+     * @return string The Norma application base path.
      */
     public static function appBasePath($server = NULL) {
         static $appBasePath = null;
@@ -107,9 +107,9 @@ class Norma {
     }
     
     /**
-     * Returns the absolute path of the application's directory.
+     * Returns the absolute path of the application directory.
      * 
-     * @return string The absolute path of the application's directory.
+     * @return string The absolute path of the application directory.
      */
     public static function appDir() {
         static $appDir = null;
@@ -122,6 +122,15 @@ class Norma {
             $appDir = $currentDir;
         }
         return $appDir;
+    }
+    
+    /**
+     * Returns the absolute path of the application cache directory.
+     * 
+     * @return string The absolute path of the application cache directory.
+     */
+    public static function cacheDir() {
+        return static::appDir() . '/app/cache';
     }
     
     /**

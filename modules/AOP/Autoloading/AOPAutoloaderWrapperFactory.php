@@ -29,6 +29,8 @@ namespace Norma\AOP\Autoloading;
 
 use Norma\AOP\Autoloading\AOPAutoloaderWrapperFactoryInterface;
 use Norma\AOP\Autoloading\AOPAutoloaderWrapper;
+use Norma\AOP\FS\AOPEligiblePathDeterminerInterface;
+use Norma\AOP\Stream\AOPFilenameStreamFilterRewriterInterface;
 use Composer\Autoload\ClassLoader;
 
 /**
@@ -39,10 +41,33 @@ use Composer\Autoload\ClassLoader;
 class AOPAutoloaderWrapperFactory implements AOPAutoloaderWrapperFactoryInterface {
     
     /**
+     * @var AOPEligiblePathDeterminerInterface
+     */
+    protected $AOPEligiblePathDeterminer;
+    
+    /**
+     * @var AOPFilenameStreamFilterRewriterInterface
+     */
+    protected $AOPFilenameStreamFilterRewriterInterface;
+    
+    /**
+     * Constructs a new factory.
+     * 
+     * @param AOPEligiblePathDeterminerInterface $AOPEligiblePathDeterminer 
+     * @param AOPEligiblePathDeterminerInterface $AOPEligiblePathDeterminer An AOP eligible path determiner.
+     * @param AOPFilenameStreamFilterRewriterInterface $AOPFilenameStreamFilterRewriter An AOP stream filter rewriter.
+     * @param AOPFilenameStreamFilterRewriterInterface $AOPFilenameStreamFilterRewriter
+     */
+    public function __construct(AOPEligiblePathDeterminerInterface $AOPEligiblePathDeterminer, AOPFilenameStreamFilterRewriterInterface $AOPFilenameStreamFilterRewriter) {
+        $this->AOPEligiblePathDeterminer = $AOPEligiblePathDeterminer;
+        $this->AOPFilenameStreamFilterRewriter = $AOPFilenameStreamFilterRewriter;
+    }
+    
+    /**
      * {@inheritdoc}
      */
     public function makeAOPAutoloaderWrapper(ClassLoader $classLoader): AOPAutoloaderWrapperInterface {
-        return new AOPAutoloaderWrapper($classLoader);
+        return new AOPAutoloaderWrapper($classLoader, $this->AOPEligiblePathDeterminer, $this->AOPFilenameStreamFilterRewriter);
     }
 
 }
