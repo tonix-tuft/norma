@@ -28,6 +28,7 @@
 namespace Norma\DI;
 
 use Norma\Core\Utils\FrameworkUtils;
+use Norma\Regex\CodeRegex;
 
 /**
  * An abstract class which implements the interface of the Norma's DI container and
@@ -63,9 +64,9 @@ abstract class AbstractDependencyInjectionContainer implements DependencyInjecti
     const PARAM_ANNOTATION = '@param';
     
     /**
-     * Regular expression  to match a valid PHP variable name.
+     * Regular expression to match a valid PHP variable name.
      */
-    const VALID_PHP_VAR_NAME_REGEX = '[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*';
+    const VALID_PHP_VAR_NAME_REGEX = CodeRegex::VALID_PHP_NAME_REGEX;
     
     /**
      * A separator character used internally to identify circular dependencies.
