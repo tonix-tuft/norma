@@ -60,7 +60,7 @@ class DigestAuthorizationHeaderCredentialsParser extends AbstractAuthorizationHe
     /**
      * Parses the credentials of the `Digest` `Authorization` header.
      * 
-     * @source https://regex101.com/r/5ca1eR/1 Regex to match name value pairs of the `Digest` credentials.
+     * @see https://regex101.com/r/5ca1eR/1 Regex to match name value pairs of the `Digest` credentials.
      * @source https://evertpot.com/223/ Provides some insights on Basic and Digest authentication.
      * @source https://tools.ietf.org/html/rfc2617 RFC for Basic and Digest authentication.
      * 

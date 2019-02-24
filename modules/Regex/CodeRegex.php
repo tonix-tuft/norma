@@ -40,7 +40,8 @@ final class CodeRegex {
     private function __construct() {}
     
     /**
-     * Regular expression to match a valid PHP name (variable, class, etc...), without leading `^` and trailing `$` assertions.
+     * Regular expression to match a valid PHP name (variable, class, etc...), without leading `^` and trailing `$` assertions
+     * and without the regex delimiters, allowing it to be included in other regexes as well.
      */
     const VALID_PHP_NAME_REGEX = '[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*';
     

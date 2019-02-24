@@ -25,30 +25,30 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Norma\AOP\Weaving;
-
-use Norma\AOP\Weaving\AspectWeaverInterface;
+namespace Norma\AOP\Registration;
 
 /**
- * Norma's aspect weaver implementation.
+ * An interface representing a registrar of aspects metadata which can be registered and lately retrieved
+ * during the execution of an application.
  *
  * @author Anton Bagdatyev (Tonix-Tuft) <antonytuft@gmail.com>
  */
-class AspectWeaver implements AspectWeaverInterface {
+interface AspectsMetadataRegistrarInterface {
     
     /**
-     * {@inheritdoc}
+     * Registers an aspect.
+     * 
+     * @param string $aspect The aspect to register.
+     * @return void
+     * @throws \Exception If the aspect could not be registered for some reason.
      */
-    public function weaveSourceCodeIfNeeded($sourceCode) {
-        // TODO
-        
-        /*
-         * - token_get_all
-         * 
-         * 
-         */
-        
-        return $sourceCode;
-    }
-
+    public function registerAspect($aspect);
+    
+    /**
+     * Returns all the aspects metadata registered so far.
+     * 
+     * @return array<AspectMetadataInterface> An array of all of the so far registered aspects metadata.
+     */
+    public function getRegisteredAspectsMetadata();
+    
 }

@@ -44,7 +44,7 @@ class AuthorizationHeaderParserFactory implements AuthorizationHeaderParserFacto
      */
     public function makeAuthorizationHeaderCredentialsParser($authorizationHeaderValue): AuthorizationHeaderCredentialsParserInterface {
         /*
-         * @source https://regex101.com/r/hyj0bc/3 Regex for `Authorization` header type and credentials.
+         * @see https://regex101.com/r/hyj0bc/3 Regex for `Authorization` header type and credentials.
          */
         $matches = [];
         preg_match('/^(?P<type>[^\s]*)\s*(?P<credentials>.*)$/s', $authorizationHeaderValue, $matches);

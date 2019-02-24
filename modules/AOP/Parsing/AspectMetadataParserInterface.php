@@ -25,30 +25,25 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Norma\AOP\Weaving;
+namespace Norma\AOP\Parsing;
 
-use Norma\AOP\Weaving\AspectWeaverInterface;
+use Norma\AOP\Registration\AspectMetadataInterface;
+use Norma\AOP\Parsing\AspectMetadataParsingException;
 
 /**
- * Norma's aspect weaver implementation.
+ * The interface of an aspect metadata parser.
  *
  * @author Anton Bagdatyev (Tonix-Tuft) <antonytuft@gmail.com>
  */
-class AspectWeaver implements AspectWeaverInterface {
-    
+interface AspectMetadataParserInterface {
+   
     /**
-     * {@inheritdoc}
+     * Parses an aspect and returns its metadata.
+     * 
+     * @param string $aspect The name of the aspect class to parse.
+     * @return AspectMetadataInterface The aspect metadata.
+     * @throws AspectMetadataParsingException If the parsing process fails due to invalid syntax or for some other reason.
      */
-    public function weaveSourceCodeIfNeeded($sourceCode) {
-        // TODO
-        
-        /*
-         * - token_get_all
-         * 
-         * 
-         */
-        
-        return $sourceCode;
-    }
-
+    public function parse($aspect): AspectMetadataInterface;
+    
 }

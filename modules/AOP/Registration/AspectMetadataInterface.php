@@ -25,30 +25,39 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Norma\AOP\Weaving;
-
-use Norma\AOP\Weaving\AspectWeaverInterface;
+namespace Norma\AOP\Registration;
 
 /**
- * Norma's aspect weaver implementation.
- *
+ * An interface representing the metadata of an aspect.
+ * 
  * @author Anton Bagdatyev (Tonix-Tuft) <antonytuft@gmail.com>
  */
-class AspectWeaver implements AspectWeaverInterface {
+interface AspectMetadataInterface {
     
     /**
-     * {@inheritdoc}
+     * Gets the aspect.
+     * 
+     * @return string The aspect.
      */
-    public function weaveSourceCodeIfNeeded($sourceCode) {
-        // TODO
-        
-        /*
-         * - token_get_all
-         * 
-         * 
-         */
-        
-        return $sourceCode;
-    }
-
+    public function getAspect();
+    
+    /**
+     * Gets the pointcuts. The key MUST be the name of the pointcut,
+     * which can also be retrieved through the pointcut itself using {@link Norma\AOP\Pointcut\PointcutInterface::getName()}.
+     * 
+     * @return array The pointcuts.
+     */
+    public function getPointcuts();
+    
+    /**
+     * Gets the pointcut advices map.
+     * The returned array MUST have the following structure: each key of the array must be the name of a pointcut
+     * which can also be retrieved through the pointcut itself using {@link Norma\AOP\Pointcut\PointcutInterface::getName()}
+     * and each value is a bidimensional array where the key represents the type of advice ({@link Norma\AOP\Advice\AdviceTypeEnum})
+     * and the value is an array of method names representing the advices of the aspect to execute should the pointcut match.
+     * 
+     * @return array The pointcut advices map.
+     */
+    public function getPointcutAdvicesMap();
+    
 }

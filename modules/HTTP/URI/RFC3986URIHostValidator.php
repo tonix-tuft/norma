@@ -41,7 +41,7 @@ class RFC3986URIHostValidator implements RFC3986URIHostValidatorInterface {
      */
     public function isValidIPLiteral($URIHost) {
         /*
-         * @source https://regex101.com/r/ubDXoH/5
+         * @see https://regex101.com/r/ubDXoH/5
          */
         return preg_match('/^
                 \[
@@ -244,7 +244,7 @@ class RFC3986URIHostValidator implements RFC3986URIHostValidatorInterface {
      */
     public function isValidIPv4Address($URIHost) {
         /*
-         * @source https://regex101.com/r/ztva7D/2
+         * @see https://regex101.com/r/ztva7D/2
          */
         return preg_match('/^
                 (?P<dec_octet>
@@ -274,7 +274,7 @@ class RFC3986URIHostValidator implements RFC3986URIHostValidatorInterface {
      */
     public function isValidRegName($URIHost) {
         /*
-         * @source https://regex101.com/r/2F6GjS/2
+         * @see https://regex101.com/r/2F6GjS/2
          * @source https://stackoverflow.com/questions/7994287/is-url-percent-encoding-case-sensitive#answer-18347870
          */
         return preg_match('/^

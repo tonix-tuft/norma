@@ -25,30 +25,27 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Norma\AOP\Weaving;
+namespace Norma\AOP\Registration;
 
-use Norma\AOP\Weaving\AspectWeaverInterface;
+use Norma\AOP\Registration\AspectMetadataInterface;
 
 /**
- * Norma's aspect weaver implementation.
+ * A factory interface to use for the creation of aspect metadata.
  *
  * @author Anton Bagdatyev (Tonix-Tuft) <antonytuft@gmail.com>
  */
-class AspectWeaver implements AspectWeaverInterface {
+interface AspectMetadataFactoryInterface {
     
     /**
-     * {@inheritdoc}
+     * Makes new instance of aspect metadata.
+     * 
+     * @param string $aspect The aspect.
+     * @param array $pointcuts The aspect's pointcuts, each pointcut indexed by its name.
+     * @param array $pointcutAdvicesMap A map where each key is the name of a pointcut of the aspect and each value
+     *                                                          is a bidimensional array having an advice type as the key and an array of advices to execute
+     *                                                          should that pointcut match as the value.
+     * @return AspectMetadataInterface The aspect metadata.
      */
-    public function weaveSourceCodeIfNeeded($sourceCode) {
-        // TODO
-        
-        /*
-         * - token_get_all
-         * 
-         * 
-         */
-        
-        return $sourceCode;
-    }
-
+    public function make($aspect, $pointcuts, $pointcutAdvicesMap): AspectMetadataInterface;
+    
 }

@@ -25,30 +25,13 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Norma\AOP\Weaving;
-
-use Norma\AOP\Weaving\AspectWeaverInterface;
-
 /**
- * Norma's aspect weaver implementation.
+ * A pointcut representing a conjunction between two or more pointcuts (logical AND).
  *
  * @author Anton Bagdatyev (Tonix-Tuft) <antonytuft@gmail.com>
  */
-class AspectWeaver implements AspectWeaverInterface {
+class ConjunctionPointcut {
     
-    /**
-     * {@inheritdoc}
-     */
-    public function weaveSourceCodeIfNeeded($sourceCode) {
-        // TODO
-        
-        /*
-         * - token_get_all
-         * 
-         * 
-         */
-        
-        return $sourceCode;
-    }
-
+    // TODO
+    
 }

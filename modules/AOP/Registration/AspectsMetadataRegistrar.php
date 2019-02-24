@@ -25,30 +25,49 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Norma\AOP\Weaving;
+namespace Norma\AOP\Registration;
 
-use Norma\AOP\Weaving\AspectWeaverInterface;
+use Norma\AOP\Registration\AspectsMetadataRegistrarInterface;
+use Norma\AOP\Parsing\AspectMetadataParserInterface;
 
 /**
- * Norma's aspect weaver implementation.
+ * The implementation of a registrar of aspects metadata.
  *
  * @author Anton Bagdatyev (Tonix-Tuft) <antonytuft@gmail.com>
  */
-class AspectWeaver implements AspectWeaverInterface {
+class AspectsMetadataRegistrar implements AspectsMetadataRegistrarInterface {
+    
+    /**
+     * @var AspectMetadataParserInterface
+     */
+    protected $parser;
+    
+    /**
+     * @var array<Norma\AOP\Registration\AspectMetadataInterface>
+     */
+    protected $aspectsMetadata;
+    
+    /**
+     * @param AspectMetadataParserInterface
+     */
+    public function __construct(AspectMetadataParserInterface $parser) {
+        $this->parser = $parser;
+        $this->aspectsMetadata = [];
+    }
     
     /**
      * {@inheritdoc}
      */
-    public function weaveSourceCodeIfNeeded($sourceCode) {
-        // TODO
-        
-        /*
-         * - token_get_all
-         * 
-         * 
-         */
-        
-        return $sourceCode;
+    public function getRegisteredAspectsMetadata() {
+        return $this->aspectsMetadata;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function registerAspect($aspect) {
+        $metadata = $this->parser->parse($aspect);
+        $this->aspectsMetadata[] = $metadata;
     }
 
 }

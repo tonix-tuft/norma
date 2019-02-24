@@ -25,30 +25,22 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Norma\AOP\Weaving;
+namespace Norma\AOP\Pointcut\Parsing\State\Lexer;
 
-use Norma\AOP\Weaving\AspectWeaverInterface;
+use Norma\State\FSM\DistributedTransitionLogicFiniteStateMachineInterface;
 
 /**
- * Norma's aspect weaver implementation.
+ * Pointcut parser lexer's state waiting for next token to start.
  *
  * @author Anton Bagdatyev (Tonix-Tuft) <antonytuft@gmail.com>
  */
-class AspectWeaver implements AspectWeaverInterface {
+class WaitingForNextTokenToStartState extends AbstractLexerState {
     
     /**
      * {@inheritdoc}
      */
-    public function weaveSourceCodeIfNeeded($sourceCode) {
-        // TODO
+    public function processChar(DistributedTransitionLogicFiniteStateMachineInterface $FSM, $char, $pos, DistributedTransitionLogicFiniteStateMachineInterface $parserFSM) {
         
-        /*
-         * - token_get_all
-         * 
-         * 
-         */
-        
-        return $sourceCode;
     }
 
 }

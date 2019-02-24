@@ -25,30 +25,24 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Norma\AOP\Weaving;
+namespace Norma\AOP\Registration;
 
-use Norma\AOP\Weaving\AspectWeaverInterface;
+use Norma\AOP\Registration\AspectMetadataFactoryInterface;
+use Norma\AOP\Registration\AspectMetadataInterface;
+use Norma\AOP\Registration\AspectMetadata;
 
 /**
- * Norma's aspect weaver implementation.
+ * Implementation of an aspect metadata factory.
  *
  * @author Anton Bagdatyev (Tonix-Tuft) <antonytuft@gmail.com>
  */
-class AspectWeaver implements AspectWeaverInterface {
+class AspectMetadataFactory implements AspectMetadataFactoryInterface {
     
     /**
      * {@inheritdoc}
      */
-    public function weaveSourceCodeIfNeeded($sourceCode) {
-        // TODO
-        
-        /*
-         * - token_get_all
-         * 
-         * 
-         */
-        
-        return $sourceCode;
+    public function make($aspect, $pointcuts, $pointcutAdvicesMap): AspectMetadataInterface {
+        return new AspectMetadata($aspect, $pointcuts, $pointcutAdvicesMap);
     }
 
 }

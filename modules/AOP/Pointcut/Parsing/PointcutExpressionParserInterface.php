@@ -25,30 +25,27 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Norma\AOP\Weaving;
+namespace Norma\AOP\Pointcut\Parsing;
 
-use Norma\AOP\Weaving\AspectWeaverInterface;
+use Norma\AOP\Pointcut\PointcutInterface;
+use Norma\AOP\Parsing\AspectMetadataParsingException;
 
 /**
- * Norma's aspect weaver implementation.
+ * The interface of a pointcut parser.
  *
  * @author Anton Bagdatyev (Tonix-Tuft) <antonytuft@gmail.com>
  */
-class AspectWeaver implements AspectWeaverInterface {
+interface PointcutExpressionParserInterface {
     
     /**
-     * {@inheritdoc}
+     * Parses a pointcut.
+     * 
+     * @param array $explodedName An array of exploded parts which form the name of the pointcut method.
+     * @param string $originalName The original name of the pointcut method.
+     * @param string $pointcutExpression The pointcut expression to parse.
+     * @return PointcutInterface The parsed pointcut.
+     * @throws AspectMetadataParsingException If the parsing process fails due to invalid syntax or for some other reason.
      */
-    public function weaveSourceCodeIfNeeded($sourceCode) {
-        // TODO
-        
-        /*
-         * - token_get_all
-         * 
-         * 
-         */
-        
-        return $sourceCode;
-    }
-
+    public function parse($explodedName, $originalName, $pointcutExpression): PointcutInterface;
+    
 }

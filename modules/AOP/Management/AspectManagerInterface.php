@@ -25,30 +25,34 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Norma\AOP\Weaving;
-
-use Norma\AOP\Weaving\AspectWeaverInterface;
+namespace Norma\AOP\Management;
 
 /**
- * Norma's aspect weaver implementation.
+ * The interface of an aspect manager lets creating aspects
+ * and calling their methods easily.
  *
  * @author Anton Bagdatyev (Tonix-Tuft) <antonytuft@gmail.com>
  */
-class AspectWeaver implements AspectWeaverInterface {
+interface AspectManagerInterface {
     
     /**
-     * {@inheritdoc}
+     * Gets the instance of an aspect.
+     * 
+     * @param string $aspect A string representing the aspect component to create.
+     * @return object An instance representing the aspect.
      */
-    public function weaveSourceCodeIfNeeded($sourceCode) {
-        // TODO
-        
-        /*
-         * - token_get_all
-         * 
-         * 
-         */
-        
-        return $sourceCode;
-    }
-
+    public function getAspect($aspect);
+    
+    /**
+     * Calls a method on a previously created aspect and returns its result.
+     * 
+     * @param object $aspect The aspect.
+     * @param string $method The name of the method of the aspect to call.
+     * @param array $paramsMapInjection An optional map of parameters where the key is the name of the parameter and the value is the parameter
+     *                                                          itself to use when calling the method.
+     *                                                          This is particularly useful if the underlying implementation of this method uses a DI container.
+     * @return mixed The result of the method execution.
+     */
+    public function callAspectMethod($aspect, $method, $paramsMapInjection = []);
+    
 }

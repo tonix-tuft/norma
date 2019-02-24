@@ -25,30 +25,23 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Norma\AOP\Weaving;
+namespace Norma\AOP\Pointcut;
 
-use Norma\AOP\Weaving\AspectWeaverInterface;
+use Norma\AOP\JoinPoint\JoinPointInterface;
 
 /**
- * Norma's aspect weaver implementation.
+ * The interface of a pointcut.
  *
  * @author Anton Bagdatyev (Tonix-Tuft) <antonytuft@gmail.com>
  */
-class AspectWeaver implements AspectWeaverInterface {
-    
-    /**
-     * {@inheritdoc}
-     */
-    public function weaveSourceCodeIfNeeded($sourceCode) {
-        // TODO
-        
-        /*
-         * - token_get_all
-         * 
-         * 
-         */
-        
-        return $sourceCode;
-    }
+class PointcutInterface {
 
+    /**
+     * Tests whether the pointcut matches a given join point.
+     * 
+     * @param JoinPointInterface $joinPoint A join point.
+     * @return bool TRUE if the pointcut matches a given join point, FALSE otherwise.
+     */
+    public function matches(JoinPointInterface $joinPoint);
+    
 }

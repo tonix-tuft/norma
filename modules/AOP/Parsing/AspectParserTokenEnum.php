@@ -25,30 +25,38 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Norma\AOP\Weaving;
-
-use Norma\AOP\Weaving\AspectWeaverInterface;
+namespace Norma\AOP\Parsing;
 
 /**
- * Norma's aspect weaver implementation.
+ * An enum-like class which defines the tokens of an aspect parser.
  *
  * @author Anton Bagdatyev (Tonix-Tuft) <antonytuft@gmail.com>
  */
-class AspectWeaver implements AspectWeaverInterface {
+class AspectParserTokenEnum {
     
     /**
-     * {@inheritdoc}
+     * Method name delimiter token.
      */
-    public function weaveSourceCodeIfNeeded($sourceCode) {
-        // TODO
-        
-        /*
-         * - token_get_all
-         * 
-         * 
-         */
-        
-        return $sourceCode;
-    }
+    const TOKEN_METHOD_NAME_DELIMITER = ' ';
+    
+    /**
+     * Pointcut token.
+     */
+    const TOKEN_POINTCUT = 'pointcut';
+    
+    /**
+     * Before advice token.
+     */
+    const TOKEN_ADVICE_BEFORE = 'before';
+    
+    /**
+     * After advice token.
+     */
+    const TOKEN_ADVICE_AFTER = 'after';
 
+    /**
+     * Around advice token.
+     */
+    const TOKEN_ADVICE_AROUND = 'around';
+    
 }

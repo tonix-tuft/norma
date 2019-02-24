@@ -25,30 +25,32 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Norma\AOP\Weaving;
+namespace Norma\AOP\Advice;
 
-use Norma\AOP\Weaving\AspectWeaverInterface;
+use Norma\Core\Utils\EnumToKeyValTrait;
 
 /**
- * Norma's aspect weaver implementation.
+ * An advice type.
  *
  * @author Anton Bagdatyev (Tonix-Tuft) <antonytuft@gmail.com>
  */
-class AspectWeaver implements AspectWeaverInterface {
+abstract class AdviceTypeEnum {
+
+    use EnumToKeyValTrait;
     
     /**
-     * {@inheritdoc}
+     * Before advice type.
      */
-    public function weaveSourceCodeIfNeeded($sourceCode) {
-        // TODO
-        
-        /*
-         * - token_get_all
-         * 
-         * 
-         */
-        
-        return $sourceCode;
-    }
-
+    const BEFORE = 1;
+    
+    /**
+     * After advice type.
+     */
+    const AFTER = 2;
+    
+    /**
+     * Around advice type.
+     */
+    const AROUND = 3;
+    
 }

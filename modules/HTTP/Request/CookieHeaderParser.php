@@ -91,7 +91,7 @@ class CookieHeaderParser implements CookieHeaderParserInterface {
          * @source https://tools.ietf.org/html/rfc6265#section-4.2.1
          * @source https://tools.ietf.org/html/rfc2616#section-2.2
          * @source https://en.wikipedia.org/wiki/Augmented_Backus%E2%80%93Naur_form#Core_rules
-         * @source https://regex101.com/r/sNRqS1/4 Regex for cookie request header name value parsing.
+         * @see https://regex101.com/r/sNRqS1/4 Regex for cookie request header name value parsing.
          */
         $matches = [];
         preg_match_all('~

@@ -39,6 +39,7 @@ use Norma\Middleware\MiddlewareLayerExecutorTrait;
 use Norma\Core\Oops\ErrorCapturerInterface;
 use Composer\Autoload\ClassLoader;
 use Norma\AOP\Autoloading\AOPAutoloaderWrapperFactoryInterface;
+use Norma\AOP\Registration\AspectsMetadataRegistrarInterface;
 
 /**
  * The abstract base class for Norma application's runtimes.
@@ -198,6 +199,10 @@ abstract class AbstractRuntime implements RuntimeInterface {
      */
     protected function configureContainer() {
         $container = $this->instantiateContainer();
+        
+        /*
+         * Framework's DI configuration.
+         */
         $this->configureContainerWithFrameworkConfig($container);
 
         /*
@@ -336,15 +341,12 @@ abstract class AbstractRuntime implements RuntimeInterface {
         /*
          * Steps of AOP layer configuration:
          * 
-         * 1) Registering the autoloader wrapper;
+         * 1) Registering all the aspects;
          * 
-         * 2) Registering the aspect weaver;
-         * 
-         * 3) Registering all the aspects;
+         * 2) Registering the AOP autoloader wrapper;
          */
-        $this->registerAspects();
+        $this->registerAspects($container);
         $this->registerAOPAutoloaderWrapper($container);
-        $this->registerAspectWeaver();
     }
     
     /**
@@ -352,10 +354,9 @@ abstract class AbstractRuntime implements RuntimeInterface {
      * 
      * @param AbstractDependencyInjectionContainer $container The DI container.
      * @return void
-     * @throws 
+     * @throws \RuntimeException If a Composer's autoloader is not found among the registered autoloaders.
      */
     protected function registerAOPAutoloaderWrapper(AbstractDependencyInjectionContainer $container) {
-        // TODO: review
         $atLeastOneClassLoaderWasWrapped = FALSE;
         $registeredAutoloaders = spl_autoload_functions() ?? [];
         $autoloadersToReregister = [];
@@ -378,28 +379,47 @@ abstract class AbstractRuntime implements RuntimeInterface {
         }
         
         if (!$atLeastOneClassLoaderWasWrapped) {
-            throw new \RuntimeException(sprintf('No class loader of type "%s" was found when registering the AOP autoloader wrapper.', ClassLoader::class));
+            throw new \RuntimeException(sprintf('Could not register the AOP autoloader wrapper because no registered class loader of type "%s" was registered before.', ClassLoader::class));
         }
-    }
-    
-    /**
-     * Registers the aspect weaver.
-     * 
-     * @return void
-     */
-    protected function registerAspectWeaver() {
-        // TODO: implement
-        
     }
     
     /**
      * Registers the aspects of the AOP layer.
      * 
+     * @param AbstractDependencyInjectionContainer $container The DI container.
      * @return void
      */
-    protected function registerAspects() {
-        // TODO: implement
+    protected function registerAspects(AbstractDependencyInjectionContainer $container) {
+        $aspects = $this->getAllAspectsToRegister();
+        /* @var $aspectsRegistrar AspectsMetadataRegistrarInterface */
+        $aspectsRegistrar = $container->get(AbstractDependencyInjectionContainer::buildQualifiedComponentKey(['norma', 'framework', 'aop', AspectsMetadataRegistrarInterface::class]));
+        foreach ($aspects as $aspect) {
+            $aspectsRegistrar->registerAspect($aspect);
+        }
+    }
+    
+    /**
+     * Gets all the aspects to register.
+     * 
+     * @return array An array of aspects to register.
+     */
+    protected function getAllAspectsToRegister() {
+        /*
+         * Framework's aspects.
+         */
+        $aspects = (require_once $this->normaDir . '/config/aspects.php') ?? [];
         
+        /*
+         * Application's aspects.
+         */
+        $aspects = array_merge($aspects, (require_once $this->normaDir . '/app/config/aspects.php') ?? []);
+        $aspects = array_merge($aspects, (require_once $this->normaDir . '/app/config/' . $this->environment . '/aspects.php') ?? []);
+        $aspects = array_merge($aspects, (require_once $this->normaDir . '/app/config/runtime-' . $this->runtime . '/aspects.php') ?? []);
+        $aspects = array_merge($aspects, (require_once $this->normaDir . '/app/config/runtime-' . $this->runtime . '/' . $this->environment . '/aspects.php') ?? []);
+        
+        $aspects = array_unique($aspects);
+        
+        return $aspects;
     }
     
     /**

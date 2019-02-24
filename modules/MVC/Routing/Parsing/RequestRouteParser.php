@@ -201,8 +201,8 @@ class RequestRouteParser implements RequestRouteParserInterface {
      */
     protected function parseRoutePattern($routePattern) {
         /*
-         * @source https://regex101.com/r/tg2ffX/57 Regex for a single slug with regex pattern.
-         * @source https://regex101.com/r/8ToYqq/3 Regex for a single simple slug.
+         * @see https://regex101.com/r/tg2ffX/57 Regex for a single slug with regex pattern.
+         * @see https://regex101.com/r/8ToYqq/3 Regex for a single simple slug.
          */
         
         // 1. Parse regex slugs.

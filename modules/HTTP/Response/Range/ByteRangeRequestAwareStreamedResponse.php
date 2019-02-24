@@ -228,7 +228,7 @@ class ByteRangeRequestAwareStreamedResponse extends StreamedResponse implements 
         $byteRangeHeaderValue = $request->getHeaderLine('Range');
         
         /*
-         * @source https://regex101.com/r/FPVS8K/1 Regex for byte ranges.
+         * @see https://regex101.com/r/FPVS8K/1 Regex for byte ranges.
          */
         if (preg_match('/^
                 bytes

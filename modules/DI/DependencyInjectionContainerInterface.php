@@ -63,8 +63,8 @@ interface DependencyInjectionContainerInterface {
      * dependencies of the method or the function being called.
      * 
      * @param callable|string $whatToCall The method or function to call.
-     * @param array $paramsMapInjection An optional map of parameters where the key is the name of the parameter and the values is the parameter
-     *                                                          itself to use when calling the method of function.
+     * @param array $paramsMapInjection An optional map of parameters where the key is the name of the parameter and the value is the parameter
+     *                                                          itself to use when calling the method or function.
      *                                                          The container should use this parameters instead of resolving the dependencies for parameters having the same
      *                                                          name.
      * @return mixed The return value of the called method or function.

@@ -25,30 +25,15 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Norma\AOP\Weaving;
-
-use Norma\AOP\Weaving\AspectWeaverInterface;
+namespace Norma\AOP\Advice\Parsing;
 
 /**
- * Norma's aspect weaver implementation.
+ * The interface of an advice parser.
  *
  * @author Anton Bagdatyev (Tonix-Tuft) <antonytuft@gmail.com>
  */
-class AspectWeaver implements AspectWeaverInterface {
+interface AdviceParserInterface {
     
-    /**
-     * {@inheritdoc}
-     */
-    public function weaveSourceCodeIfNeeded($sourceCode) {
-        // TODO
-        
-        /*
-         * - token_get_all
-         * 
-         * 
-         */
-        
-        return $sourceCode;
-    }
-
+    // TODO
+    
 }

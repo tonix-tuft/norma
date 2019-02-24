@@ -756,8 +756,8 @@ abstract class AbstractDependencyInjectionContainer implements DependencyInjecti
      * Resolves the parameters of a function.
      * 
      * @param \ReflectionFunction $reflectionFunction The function which parameters to resolve.
-     * @param array $paramsMapInjection An optional map of parameters where the key is the name of the parameter and the values is the parameter
-     *                                                          itself to use when calling the method of function.
+     * @param array $paramsMapInjection An optional map of parameters where the key is the name of the parameter and the value is the parameter
+     *                                                          itself to use when calling the function.
      *                                                          The container should use this parameters instead of resolving the dependencies for parameters having the same
      *                                                          name.
      * @return array An array of resolved parameters.
@@ -782,8 +782,8 @@ abstract class AbstractDependencyInjectionContainer implements DependencyInjecti
      * 
      * @param \ReflectionClass $reflectionClass The class of the method.
      * @param \ReflectionMethod $reflectionMethod The method.
-     * @param array $paramsMapInjection An optional map of parameters where the key is the name of the parameter and the values is the parameter
-     *                                                          itself to use when calling the method of function.
+     * @param array $paramsMapInjection An optional map of parameters where the key is the name of the parameter and the value is the parameter
+     *                                                          itself to use when calling the method.
      *                                                          The container should use this parameters instead of resolving the dependencies for parameters having the same
      *                                                          name.
      * @return array An array of resolved parameters.
@@ -1053,8 +1053,8 @@ abstract class AbstractDependencyInjectionContainer implements DependencyInjecti
      * Resolve the parameters of a method or function.
      * 
      * @param \ReflectionFunctionAbstract $reflectionFuncOrMethod The method or function.
-     * @param array $paramsMapInjection An optional map of parameters where the key is the name of the parameter and the values is the parameter
-     *                                                          itself to use when calling the method of function.
+     * @param array $paramsMapInjection An optional map of parameters where the key is the name of the parameter and the value is the parameter
+     *                                                          itself to use when calling the method or function.
      *                                                          The container should use this parameters instead of resolving the dependencies for parameters having the same
      *                                                          name.
      * @return array|string An array of resolved parameters or a string with the name of the parameter which could not be resolved.
@@ -1531,8 +1531,8 @@ abstract class AbstractDependencyInjectionContainer implements DependencyInjecti
      * Calls a function.
      * 
      * @param string|\Closure $function The function's name or closure.
-     * @param array $paramsMapInjection An optional map of parameters where the key is the name of the parameter and the values is the parameter
-     *                                                          itself to use when calling the method of function.
+     * @param array $paramsMapInjection An optional map of parameters where the key is the name of the parameter and the value is the parameter
+     *                                                          itself to use when calling the function.
      *                                                          The container should use this parameters instead of resolving the dependencies for parameters having the same
      *                                                          name.
      * @return mixed The return value of the called function.

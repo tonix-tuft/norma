@@ -25,30 +25,27 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Norma\AOP\Weaving;
-
-use Norma\AOP\Weaving\AspectWeaverInterface;
+namespace Norma\AOP\Pointcut;
 
 /**
- * Norma's aspect weaver implementation.
- *
+ * The interface of a complex pointcut.
+ * 
  * @author Anton Bagdatyev (Tonix-Tuft) <antonytuft@gmail.com>
  */
-class AspectWeaver implements AspectWeaverInterface {
+interface ComplexPointcutInterface extends PointcutInterface {
     
     /**
-     * {@inheritdoc}
+     * Gets the pointcut name.
+     * 
+     * @return string The name of the pointcut.
      */
-    public function weaveSourceCodeIfNeeded($sourceCode) {
-        // TODO
-        
-        /*
-         * - token_get_all
-         * 
-         * 
-         */
-        
-        return $sourceCode;
-    }
-
+    public function getName();
+    
+    /**
+     * Gets the pointcut expression.
+     * 
+     * @return string The pointcut expression.
+     */
+    public function getPointcutExpression();
+    
 }

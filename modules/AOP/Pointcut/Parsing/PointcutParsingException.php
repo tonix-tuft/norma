@@ -25,30 +25,13 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Norma\AOP\Weaving;
+namespace Norma\AOP\Pointcut\Parsing;
 
-use Norma\AOP\Weaving\AspectWeaverInterface;
+use Norma\AOP\Parsing\AspectMetadataParsingException;
 
 /**
- * Norma's aspect weaver implementation.
+ * An exception to throw whenever the parsing process of a pointcut fails for some reason.
  *
  * @author Anton Bagdatyev (Tonix-Tuft) <antonytuft@gmail.com>
  */
-class AspectWeaver implements AspectWeaverInterface {
-    
-    /**
-     * {@inheritdoc}
-     */
-    public function weaveSourceCodeIfNeeded($sourceCode) {
-        // TODO
-        
-        /*
-         * - token_get_all
-         * 
-         * 
-         */
-        
-        return $sourceCode;
-    }
-
-}
+class PointcutParsingException extends AspectMetadataParsingException {}

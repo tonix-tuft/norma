@@ -25,30 +25,13 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Norma\AOP\Weaving;
+namespace Norma\AOP\Parsing;
 
-use Norma\AOP\Weaving\AspectWeaverInterface;
+use Norma\Core\Oops\AbstractException;
 
 /**
- * Norma's aspect weaver implementation.
+ * An exception to throw whenever the parsing of the metadata of an aspect fails.
  *
  * @author Anton Bagdatyev (Tonix-Tuft) <antonytuft@gmail.com>
  */
-class AspectWeaver implements AspectWeaverInterface {
-    
-    /**
-     * {@inheritdoc}
-     */
-    public function weaveSourceCodeIfNeeded($sourceCode) {
-        // TODO
-        
-        /*
-         * - token_get_all
-         * 
-         * 
-         */
-        
-        return $sourceCode;
-    }
-
-}
+class AspectMetadataParsingException extends AbstractException {}
