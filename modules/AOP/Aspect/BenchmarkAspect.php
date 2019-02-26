@@ -79,8 +79,9 @@ class BenchmarkAspect implements AspectInterface {
      *          - Pointcut = [Pointcut1|Pointcut2|Pointcut3|Pointcut4|Pointcut5]
      *
      * A simple pointcut definition (`Pointcut1`, `Pointcut2`, `Pointcut3`, `Pointcut4`, `Pointcut5`) MUST be encapsulated into curly braces (`{}`),
-     * otherwise the AOP pointcut parser component will throw an exception. This is to simplify readability.
-     * The only exception is for named pointcuts: a pointcut already defined which is referenced by its name does not require to be encapsulated into
+     * otherwise the AOP pointcut parser component will throw an exception. This is done to force using curly braces with simple poincut definitions
+     * to simplify readability.
+     * The only exception are named pointcuts: a pointcut already defined which is referenced by its name is not required to be encapsulated into
      * curly braces.
      * 
      * Examples:
@@ -127,7 +128,7 @@ class BenchmarkAspect implements AspectInterface {
      * Pointcut made of other pointcuts.
      */
     public function pointcut complexPointcut() {
-        // Curly braces are not mandatory for pointcut names.
+        // Curly braces are not required for named pointcuts.
         return '({pointcutName1} && pointcutName2) || (pointcutName3 && {pointcutName1}) || pointcutName2';
     }
     

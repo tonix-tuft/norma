@@ -59,9 +59,9 @@ final class LexerTokenRegex {
     /**
      * Regular expression to match a namespace pattern.
      * 
-     * @see https://regex101.com/r/lzuWh8/7
+     * @see https://regex101.com/r/lzuWh8/11
      */
-    const TOKEN_VALID_NAMESPACE_PATTERN_REGEX = '#
+    const TOKEN_NAMESPACE_PATTERN_REGEX = '#
         (?(DEFINE)
            
            # OK start char.
@@ -88,11 +88,6 @@ final class LexerTokenRegex {
                [*]
            )
     
-           # `+` char.
-           (?<PLUS>
-               [+]
-           )
-    
            # ORed OK chars.
            (?<OK_CHAR>(?:
                (?&OK_START_CHAR)
@@ -102,29 +97,42 @@ final class LexerTokenRegex {
                (?&NS_SEPARATOR)
                |
                (?&WILDCARD)
-               |
-               (?&PLUS)
            ))
            
            # Digit char.
            (?<DIGIT_CHAR>[0-9])
            
+           # Reserved tokens
+           (?<RESERVED_TOKEN>
+                public
+                |
+                protected
+                |
+                private
+                |
+                static
+                |
+                new
+           )
         )
         ^
         (?=(?&OK_CHAR)+$)
         (?=(?&OK_START_CHAR))
         (?!.*(?&WILDCARD){3,})
         (?!.*(?&NS_SEPARATOR){2,})
-        (?!.*(?&PLUS)(?=(?&OK_CHAR)))
         (?!.*(?&NS_SEPARATOR)(?=(?&DIGIT_CHAR)))
+        (?!(?&RESERVED_TOKEN)$)
+        (?!(?&RESERVED_TOKEN)(?&NS_SEPARATOR))
+        (?!.*(?&NS_SEPARATOR)(?&RESERVED_TOKEN)(?&NS_SEPARATOR))
+        (?!(?&WILDCARD)$)
         #x';
     
     /**
      * Regular expression to match a name pattern.
      * 
-     * @see https://regex101.com/r/Kyts0e/2
+     * @see https://regex101.com/r/Kyts0e/7
      */
-    const TOKEN_VALID_NAME_PATTERN_REGEX = '#
+    const TOKEN_NAME_PATTERN_REGEX = '#
         (?(DEFINE)
            
            # OK start char.
@@ -153,11 +161,27 @@ final class LexerTokenRegex {
                (?&WILDCARD)
            ))
            
+           # Reserved tokens
+           (?<RESERVED_TOKEN>
+                public
+                |
+                protected
+                |
+                private
+                |
+                static
+                |
+                new
+                |
+                \*
+           )
+           
         )
         ^
         (?=(?&OK_CHAR)+$)
         (?=(?&OK_START_CHAR))
         (?!.*(?&WILDCARD){2,})
+        (?!(?&RESERVED_TOKEN)$)
         #x';
     
     /**
@@ -183,7 +207,7 @@ final class LexerTokenRegex {
     /**
      * Regular expression to match an instance member access operator.
      */
-    const TOKEN_INSTANCE_MEMBER_ACCESS_REGEX = '#^->$#';
+    const TOKEN_INSTANCE_MEMBER_ACCESS_OPERATOR_REGEX = '#^->$#';
     
     /**
      * Regular expression to match method parentheses.
@@ -207,13 +231,8 @@ final class LexerTokenRegex {
     
     /**
      * Regular expression to match a single wildcard.
-     */    
-    const TOKEN_SINGLE_WILDCARD_REGEX = '#^\*$#';
-    
-    /**
-     * Regular expression to match a double wildcard.
      */
-    const TOKEN_DOUBLE_WILDCARD_REGEX = '#^\*\*$#';
+    const TOKEN_WILDCARD_REGEX = '#^\*$#';
     
     /**
      * Regular expression to match the `@` annotation starting char.
@@ -233,27 +252,27 @@ final class LexerTokenRegex {
     /**
      * Regular expression to match a `static` keyword.
      */
-    const TOKEN_STATIC_KEYWORD = '#^static$#';
+    const TOKEN_STATIC_KEYWORD_REGEX = '#^static$#';
     
     /**
      * Regular expression to match a `new` keyword.
      */
-    const TOKEN_NEW_KEYWORD = '#^new$#';
+    const TOKEN_NEW_KEYWORD_REGEX = '#^new$#';
     
     /**
      * Regular expression to match a `!` NOT operator.
      */
-    const TOKEN_NOT_OPERATOR = '#^!$#';
+    const TOKEN_NOT_OPERATOR_REGEX = '#^!$#';
     
     /**
      * Regular expression to match a double ampersand `&&` AND operator.
      */
-    const TOKEN_AND_OPERATOR = '#^&&$#';
+    const TOKEN_AND_OPERATOR_REGEX = '#^&&$#';
     
     /**
      * Regular expression to match a double pipe `||` OR operator.
      */
-    const TOKEN_OR_OPERATOR = '#^\|\|$#';
+    const TOKEN_OR_OPERATOR_REGEX = '#^\|\|$#';
     
     /**
      * Regular expression to match an opening parenthesis.
@@ -264,5 +283,10 @@ final class LexerTokenRegex {
      * Regular expression to match a closing parenthesis.
      */
     const TOKEN_PARENTHESIS_CLOSE_REGEX = '#^\)$#';
+    
+    /**
+     * Regular expression to match a pointcut identifier.
+     */
+    const TOKEN_POINTCUT_IDENTIFIER_REGEX = '#^' . CodeRegex::VALID_PHP_NAME_REGEX . '$#';
     
 }

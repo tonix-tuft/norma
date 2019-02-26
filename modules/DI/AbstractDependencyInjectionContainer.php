@@ -350,6 +350,14 @@ abstract class AbstractDependencyInjectionContainer implements DependencyInjecti
         
         return $componentToReturn;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function has($component) {
+        $normalizedComponent = $this->normalizeComponent($component);
+        return array_key_exists($normalizedComponent, $this->config);
+    }
     
     /**
      * Get the current binding context.

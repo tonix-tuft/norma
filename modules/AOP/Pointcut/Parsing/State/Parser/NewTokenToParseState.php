@@ -25,22 +25,15 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Norma\AOP\Pointcut\Parsing\State\Lexer;
-
-use Norma\State\FSM\DistributedTransitionLogicFiniteStateMachineInterface;
+namespace Norma\AOP\Pointcut\Parsing\State\Parser;
 
 /**
- * Pointcut parser lexer's state waiting for next token to start.
+ * New token to parse parser's state.
  *
  * @author Anton Bagdatyev (Tonix-Tuft) <antonytuft@gmail.com>
  */
-class WaitingForNextTokenToStartState extends AbstractLexerState {
+class NewTokenToParseState {
     
-    /**
-     * {@inheritdoc}
-     */
-    public function processChar(DistributedTransitionLogicFiniteStateMachineInterface $FSM, $char, $pos, DistributedTransitionLogicFiniteStateMachineInterface $parserFSM) {
-        
-    }
-
+    // TODO
+    
 }

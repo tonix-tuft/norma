@@ -25,23 +25,33 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Norma\State\FSM;
-
-use Norma\State\FSM\FiniteStateMachineInterface;
-use Norma\State\FSM\StateInterface;
+namespace Norma\Core\Utils;
 
 /**
- * Factory interface for building finite-state machines.
+ * Utility trait for working with regular expressions.
  *
  * @author Anton Bagdatyev (Tonix-Tuft) <antonytuft@gmail.com>
  */
-interface FiniteStateMachineFactoryInterface {
+trait RegexUtilsTrait {
     
     /**
-     * Makes a new finite-state machine.
+     * Perform a regular expression match against an array of regular expressions.
      * 
-     * @param string|StateInterface $initialState The initial state machine state.
+     * @param array $patterns Array of patterns.
+     * @param string $subject Subject string.
+     * @return bool|int FALSE if an error occurred, 1 if at least one of the patterns matched, 0 if none of the patterns matched.
      */
-    public function make($initialState): FiniteStateMachineInterface;
+    private function pregMatchAtLeastOne($patterns, $subject) {
+        foreach ($patterns as $pattern) {
+            $ret = preg_match($pattern, $subject);
+            if ($ret) {
+                return 1;
+            }
+            else if ($ret === FALSE) {
+                return FALSE;
+            }
+        }
+        return 0;
+    }
     
 }

@@ -57,6 +57,14 @@ interface DependencyInjectionContainerInterface {
      * @return mixed The asked component.
      */
     public function get($component);
+    
+    /**
+     * Checks if a component is defined within the container, without resolving it.
+     * 
+     * @param string $component The component to check.
+     * @return bool TRUE if defined, FALSE otherwise.
+     */
+    public function has($component);
 
     /**
      * Calls a method or function passing from the container, therefore letting the container to resolve the

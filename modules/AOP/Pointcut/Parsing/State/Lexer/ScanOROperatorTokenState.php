@@ -25,35 +25,37 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Norma\State\FSM;
+namespace Norma\AOP\Pointcut\Parsing\State\Lexer;
 
+use Norma\AOP\Pointcut\Parsing\State\Lexer\AbstractLexerState;
 use Norma\State\FSM\DistributedTransitionLogicFiniteStateMachineInterface;
+use Norma\AOP\Pointcut\Parsing\State\Lexer\Regex\LexerTokenRegex;
+use Norma\AOP\Pointcut\Parsing\TokenTypeEnum;
+use Norma\AOP\Pointcut\Parsing\State\Lexer\TokenStartState;
+use Norma\AOP\Pointcut\Parsing\State\Lexer\LexerEndState;
 
 /**
- * The interface of a generic FSM (Finite-State Machine) with distributed transition logic.
+ * OR operator token scanning state.
  *
  * @author Anton Bagdatyev (Tonix-Tuft) <antonytuft@gmail.com>
  */
-interface FiniteStateMachineInterface extends DistributedTransitionLogicFiniteStateMachineInterface {
+class ScanOROperatorTokenState extends AbstractLexerState {
     
     /**
-     * Executes an iteration of this state machine with optional input.
-     * 
-     * @param mixed $input The input data for the current iteration or NULL if input is not required for the state machine to work properly.
-     * @return void
+     * {@inheritdoc}
      */
-    public function process($input = NULL);
-    
-    /**
-     * Registers a callable to execute when data are set with {@link DistributedTransitionLogicFiniteStateMachineInterface::setData()}
-     * to the corresponding key.
-     * 
-     * @param string $key The key of the data.
-     * @param callable $callable The callable to execute. Implementors MUST pass the following parameters to the callable:
-     *                                           - `$data` (mixed): The new data set with {@link DistributedTransitionLogicFiniteStateMachineInterface::setData()};
-     *                                           - `$oldData` (mixed): The old data corresponding to the given key;
-     * @return void
-     */
-    public function onData($key, callable $callable);
-    
+    public function processChar($char, $pos, DistributedTransitionLogicFiniteStateMachineInterface $lexerFSM, DistributedTransitionLogicFiniteStateMachineInterface $parserFSM, $isLastChar) {
+        $token = $lexerFSM->getData('token');
+        $lexeme = $token['lexeme'] . $char;
+        if (!preg_match(LexerTokenRegex::TOKEN_OR_OPERATOR_REGEX, $lexeme)) {
+            $tokenLabel = $this->tokenLabel(TokenTypeEnum::TOKEN_OR_OPERATOR);
+            throw new Norma\AOP\Pointcut\Parsing\PointcutParsingException(
+                sprintf('Unexpected character "%s" while parsing %s token at position %s.', $char, $tokenLabel, $pos)
+            );
+        }
+        $token['lexeme'] = $lexeme;
+        $parserFSM->setData('token', $token);
+        $lexerFSM->setState($isLastChar ? LexerEndState::class : TokenStartState::class);
+    }
+
 }

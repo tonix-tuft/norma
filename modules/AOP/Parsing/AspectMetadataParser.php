@@ -180,7 +180,7 @@ class AspectMetadataParser implements AspectMetadataParserInterface {
         $aspect = $this->aspectManager->getAspect($aspectComponent);
         $pointcutMethodName = $method->getName();
         $pointcutExpression = $this->aspectManager->callAspectMethod($aspect, $pointcutMethodName);
-        return $this->pointcutExpressionParser->parse($explodedName, $pointcutMethodName, $pointcutExpression);
+        return $this->pointcutExpressionParser->parse($aspectComponent, $explodedName, $pointcutMethodName, $pointcutExpression);
     }
 
 }

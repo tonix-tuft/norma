@@ -25,23 +25,26 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Norma\State\FSM;
+namespace Norma\AOP\Pointcut\Parsing\State\Lexer;
 
-use Norma\State\FSM\FiniteStateMachineInterface;
-use Norma\State\FSM\StateInterface;
+use Norma\AOP\Pointcut\Parsing\State\Lexer\AbstractLexerState;
+use Norma\State\FSM\DistributedTransitionLogicFiniteStateMachineInterface;
+use Norma\AOP\Pointcut\Parsing\PointcutParsingException;
+use Norma\AOP\Pointcut\Parsing\State\Lexer\TokenStartState;
 
 /**
- * Factory interface for building finite-state machines.
+ * End state of lexer. A lexer in the following state has finished the lexical analysis of the current pointcut expression
+ * and cannot perform a new one until its initial state is not resumed.
  *
  * @author Anton Bagdatyev (Tonix-Tuft) <antonytuft@gmail.com>
  */
-interface FiniteStateMachineFactoryInterface {
+class LexerEndState extends AbstractLexerState {
     
     /**
-     * Makes a new finite-state machine.
-     * 
-     * @param string|StateInterface $initialState The initial state machine state.
+     * {@inheritdoc}
      */
-    public function make($initialState): FiniteStateMachineInterface;
-    
+    public function processChar($char, $pos, DistributedTransitionLogicFiniteStateMachineInterface $lexerFSM, DistributedTransitionLogicFiniteStateMachineInterface $parserFSM, $isLastChar) {
+        throw new PointcutParsingException(sprintf('The lexer cannot parse a new pointcut expression until its state is not resumed to "%s"', TokenStartState::class));
+    }
+
 }

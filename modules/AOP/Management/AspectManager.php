@@ -62,7 +62,7 @@ class AspectManager implements AspectManagerInterface {
      */
     public function getAspect($aspect) {
         $aspectInstance = $this->container->get($aspect);
-        if (!isset($this->aspects[$aspect])) {
+        if (!isset($this->aspects[$aspect]) && !$this->container->has($aspect)) {
             $this->aspects[$aspect] = TRUE;
             $this->container->addConfig([
                 'norma' => [

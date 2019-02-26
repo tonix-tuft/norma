@@ -31,6 +31,15 @@ use Norma\State\FSM\StateInterface;
 use Norma\State\FSM\DistributedTransitionLogicFiniteStateMachineInterface;
 use Norma\AOP\Pointcut\Parsing\PointcutParsingException;
 use Norma\Core\Utils\FrameworkArrayUtilsTrait;
+use Norma\AOP\Pointcut\Parsing\TokenTypeEnum;
+use Norma\AOP\Pointcut\Parsing\PointcutParsingException;
+use Norma\AOP\Pointcut\Parsing\State\Lexer\Regex\LexerTokenRegex;
+use Norma\AOP\Pointcut\Parsing\State\Lexer\ScanANDOperatorTokenState;
+use Norma\AOP\Pointcut\Parsing\State\Lexer\ScanOROperatorTokenState;
+use Norma\AOP\Pointcut\Parsing\State\Lexer\ScanStaticMemberAccessOperatorTokenState;
+use Norma\AOP\Pointcut\Parsing\State\Lexer\ScanInstanceMemberAccessOperatorTokenState;
+use Norma\AOP\Pointcut\Parsing\State\Lexer\ScanWhitespaceTokenState;
+use Norma\AOP\Pointcut\Parsing\State\Lexer\ScanParenthesisStartState;
 
 /**
  * An abstract pointcut parser lexer's state.
@@ -41,7 +50,63 @@ abstract class AbstractLexerState implements StateInterface {
     
     use FrameworkArrayUtilsTrait;
     
-    const REQUIRED_INPUT_KEYS = ['char', 'pos', 'parser_fsm'];
+    /**
+     * Required input keys.
+     */
+    const REQUIRED_INPUT_KEYS = ['char', 'pos', 'parser', 'is_last_char'];
+    
+    /**
+     * A constant array which maps every unambiguous single character token type to its corresponding regex.
+     */
+    const UNAMBIGUOUS_SINGLE_CHAR_TOKENS_MAP = [
+        TokenTypeEnum::TOKEN_SIMPLE_POINTCUT_OPEN_DELIMITER => LexerTokenRegex::TOKEN_SIMPLE_POINTCUT_OPEN_DELIMITER_REGEX,
+        TokenTypeEnum::TOKEN_SIMPLE_POINTCUT_CLOSE_DELIMITER => LexerTokenRegex::TOKEN_SIMPLE_POINTCUT_CLOSE_DELIMITER_REGEX,
+        TokenTypeEnum::TOKEN_NAMESPACE_IDENTIFIER_PLUS_OPERATOR => LexerTokenRegex::TOKEN_NAMESPACE_IDENTIFIER_PLUS_OPERATOR_REGEX,
+        TokenTypeEnum::TOKEN_ANNOTATION_START => LexerTokenRegex::TOKEN_ANNOTATION_START_REGEX,
+        TokenTypeEnum::TOKEN_NOT_OPERATOR => LexerTokenRegex::TOKEN_NOT_OPERATOR_REGEX,
+        TokenTypeEnum::TOKEN_PARENTHESIS_CLOSE => LexerTokenRegex::TOKEN_PARENTHESIS_CLOSE_REGEX
+    ];
+    
+    /**
+     * A constant array which maps every unambiguous double character token type to its regex, second character and pertaining state.
+     */
+    const UNAMBIGUOUS_DOUBLE_CHAR_TOKENS_MAP = [
+        TokenTypeEnum::TOKEN_STATIC_MEMBER_ACCESS_OPERATOR => [
+            'regex' => LexerTokenRegex::TOKEN_STATIC_MEMBER_ACCESS_OPERATOR_REGEX,
+            'second_char' => ':',
+            'state' => ScanStaticMemberAccessOperatorTokenState::class
+        ],
+        TokenTypeEnum::TOKEN_AND_OPERATOR => [
+            'regex' => LexerTokenRegex::TOKEN_AND_OPERATOR_REGEX,
+            'second_char' => '&',
+            'state' => ScanANDOperatorTokenState::class
+        ],
+        TokenTypeEnum::TOKEN_OR_OPERATOR => [
+            'regex' => LexerTokenRegex::TOKEN_OR_OPERATOR_REGEX,
+            'second_char' => '|',
+            'state' => ScanOROperatorTokenState::class
+        ],
+        TokenTypeEnum::TOKEN_INSTANCE_MEMBER_ACCESS_OPERATOR => [
+            'regex' => LexerTokenRegex::TOKEN_INSTANCE_MEMBER_ACCESS_OPERATOR_REGEX,
+            'second_char' => '>',
+            'state' => ScanInstanceMemberAccessOperatorTokenState::class
+        ],
+        TokenTypeEnum::TOKEN_WHITESPACE => [
+            'regex' => LexerTokenRegex::TOKEN_WHITESPACE_REGEX,
+            'second_char' => '',
+            'state' => ScanWhitespaceTokenState::class
+        ],
+        TokenTypeEnum::TOKEN_PARENTHESIS_OPEN => [
+            'regex' => LexerTokenRegex::TOKEN_PARENTHESIS_OPEN_REGEX,
+            'second_char' => '',
+            'state' => ScanParenthesisStartState::class
+        ]
+    ];
+    
+    /**
+     * @var array|null
+     */
+    protected $inversedTokenTypeEnumConsts = NULL;
     
     /**
      * {@inheritdoc}
@@ -53,7 +118,7 @@ abstract class AbstractLexerState implements StateInterface {
             throw new PointcutParsingException('The lexer received no input.');
         }
         
-        $emptyKey = $this->atLeastOneArrayKeyIsEmpty($input, static::INPUT_REQUIRED_KEYS);
+        $emptyKey = $this->atLeastOneArrayKeyIsEmpty($input, static::REQUIRED_INPUT_KEYS);
         if (
             $emptyKey !== FALSE
         ) {
@@ -62,18 +127,42 @@ abstract class AbstractLexerState implements StateInterface {
         
         $char = $input['char'];
         $pos = $input['pos'];
-        $parserFSM = $input['parser_fsm'];
-        $this->processChar($FSM, $char, $pos, $parserFSM);
+        $parserFSM = $input['parser'];
+        $isLastChar = $input['is_last_char'];
+        $this->processChar($FSM, $char, $pos, $parserFSM, $isLastChar);
+    }
+    
+    /**
+     * Returns the pointcut token label given its type.
+     * 
+     * @param int $tokenType The type of token. A value of a constant of the {@link TokenTypeEnum} enum-like class.
+     * @return string The label of the token.
+     * @throws PointcutParsingException If a token type is unknown.
+     */
+    protected function tokenLabel($tokenType) {
+        if (!$this->inversedTokenTypeEnumConsts) {
+            $reflectionClass = new \ReflectionClass(TokenTypeEnum::class);
+            $tokenConsts = $reflectionClass->getConstants();
+            $this->inversedTokenTypeEnumConsts = array_flip($tokenConsts);
+        }
+        if (isset($this->inversedTokenTypeEnumConsts[$tokenType])) {
+            return $this->inversedTokenTypeEnumConsts[$tokenType];
+        }
+        else {
+            throw new PointcutParsingException(sprintf('Could not lookup token label. Unknown token type "%s".', $tokenType));
+        }
     }
     
     /**
      * Processes a single char.
      * 
-     * @param DistributedTransitionLogicFiniteStateMachineInterface $FSM The lexer's state machine.
      * @param string $char A single char to process.
      * @param int $pos The position of the char within the original input source.
+     * @param DistributedTransitionLogicFiniteStateMachineInterface $lexerFSM The lexer's state machine.
      * @param DistributedTransitionLogicFiniteStateMachineInterface $parserFSM The parser's state machine.
+     * @param bool $isLastChar A boolean denoting whether the given char is the last char (TRUE) or not (FALSE).
+     * @return void
      */
-    abstract public function processChar(DistributedTransitionLogicFiniteStateMachineInterface $FSM, $char, $pos, DistributedTransitionLogicFiniteStateMachineInterface $parserFSM);
+    abstract public function processChar($char, $pos, DistributedTransitionLogicFiniteStateMachineInterface $lexerFSM, DistributedTransitionLogicFiniteStateMachineInterface $parserFSM, $isLastChar);
     
 }

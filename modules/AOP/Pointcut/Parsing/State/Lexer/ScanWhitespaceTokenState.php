@@ -25,35 +25,42 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Norma\State\FSM;
+namespace Norma\AOP\Pointcut\Parsing\State\Lexer;
 
 use Norma\State\FSM\DistributedTransitionLogicFiniteStateMachineInterface;
+use Norma\AOP\Pointcut\Parsing\State\Lexer\TokenStartState;
+use Norma\AOP\Pointcut\Parsing\State\Lexer\Regex\LexerTokenRegex;
+use Norma\AOP\Pointcut\Parsing\State\Lexer\LexerEndState;
 
 /**
- * The interface of a generic FSM (Finite-State Machine) with distributed transition logic.
+ * White space token scanning state.
  *
  * @author Anton Bagdatyev (Tonix-Tuft) <antonytuft@gmail.com>
  */
-interface FiniteStateMachineInterface extends DistributedTransitionLogicFiniteStateMachineInterface {
+class ScanWhitespaceTokenState extends AbstractLexerState {
     
     /**
-     * Executes an iteration of this state machine with optional input.
-     * 
-     * @param mixed $input The input data for the current iteration or NULL if input is not required for the state machine to work properly.
-     * @return void
+     * {@inheritdoc}
      */
-    public function process($input = NULL);
-    
-    /**
-     * Registers a callable to execute when data are set with {@link DistributedTransitionLogicFiniteStateMachineInterface::setData()}
-     * to the corresponding key.
-     * 
-     * @param string $key The key of the data.
-     * @param callable $callable The callable to execute. Implementors MUST pass the following parameters to the callable:
-     *                                           - `$data` (mixed): The new data set with {@link DistributedTransitionLogicFiniteStateMachineInterface::setData()};
-     *                                           - `$oldData` (mixed): The old data corresponding to the given key;
-     * @return void
-     */
-    public function onData($key, callable $callable);
-    
+    public function processChar($char, $pos, DistributedTransitionLogicFiniteStateMachineInterface $lexerFSM, DistributedTransitionLogicFiniteStateMachineInterface $parserFSM, $isLastChar) {
+        if (preg_match(LexerTokenRegex::TOKEN_WHITESPACE_REGEX, $char)) {
+            $lexerFSM->setData('token', function($oldData) use ($char) {
+                return array_merge($oldData, [
+                    'lexeme' => $oldData['lexeme'] . $char
+                ]);
+            });
+            $lexerFSM->setState($isLastChar ? LexerEndState::class : ScanWhitespaceTokenState::class);
+        }
+        else {
+            $token = $lexerFSM->getData('token');
+            $parserFSM->setData('token', $token);
+            $lexerFSM->setState(TokenStartState::class);
+            $lexerFSM->setData('reiterate', [
+                'char' => $char,
+                'pos' => $pos,
+                'is_last_char' => $isLastChar
+            ]);
+        }
+    }
+
 }

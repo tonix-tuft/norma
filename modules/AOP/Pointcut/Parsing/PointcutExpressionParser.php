@@ -28,12 +28,13 @@
 namespace Norma\AOP\Pointcut\Parsing;
 
 use Norma\AOP\Pointcut\Parsing\PointcutExpressionParserInterface;
-use Norma\AOP\Pointcut\PointcutInterface;
 use Norma\AOP\Pointcut\Parsing\PointcutParsingException;
+use Norma\AOP\Pointcut\Parsing\State\Lexer\TokenStartState;
+use Norma\AOP\Pointcut\Parsing\State\Parser\NewTokenToParseState;
+use Norma\AOP\Pointcut\Parsing\TokenTypeEnum;
+use Norma\AOP\Pointcut\PointcutInterface;
 use Norma\State\FSM\FiniteStateMachineFactoryInterface;
 use Norma\State\FSM\FiniteStateMachineInterface;
-use Norma\State\FSM\StateInterface;
-use Norma\State\FSM\DistributedTransitionLogicFiniteStateMachineInterface;
 
 /**
  * The implementation of a pointcut parser.
@@ -53,29 +54,107 @@ class PointcutExpressionParser implements PointcutExpressionParserInterface {
     protected $parser;
     
     /**
+     * @var string
+     */
+    protected $currentPointcutName;
+    
+    /**
+     * @var string
+     */
+    protected $aspectName;    
+    
+    /**
      * Constructs a new parser.
      * 
      * @param FiniteStateMachineFactoryInterface $FSMFactory A finite-state machine factory.
      */
     public function __construct(FiniteStateMachineFactoryInterface $FSMFactory) {
-        $this->lexer = $FSMFactory->make();
-        $this->parser = $FSMFactory->make();
+        $this->lexer = $FSMFactory->make(TokenStartState::class);
+        $this->parser = $FSMFactory->make(NewTokenToParseState::class);
+        $this->setUp();
+    }
+    
+    /**
+     * Set up.
+     * 
+     * @return void
+     */
+    protected function setUp() {
+        $lexer = $this->lexer;
+        $parser = $this->parser;
+        $that = $this;
+        
+        $lexer->onData('reiterate', function($data) use ($that, $parser) {
+            $mergedData = array_merge($data, [
+                'parser' => $parser
+            ]);
+            $that->processLexerData($mergedData);
+        });
+        
+        $parser->onData('token', function($token) use ($lexer, $that) {
+            if ($token['type'] !== TokenTypeEnum::TOKEN_WHITESPACE) {
+                $lexer->setData('last_non_whitespace_token_before_current', $token);
+            }
+            $that->processToken($token);
+        });
+    }
+    
+    /**
+     * Processes lexer's data.
+     * 
+     * @param array $data Data to pass to lexer.
+     * @return void
+     * @throws PointcutParsingException If the lexer fails to process the given data.
+     */
+    protected function processLexerData($data) {
+        try {
+            $this->lexer->process($data);
+        }
+        catch (PointcutParsingException $ex) {
+            throw new PointcutParsingException('Lexer error for pointcut "%s" of aspect "%s": %s', $this->currentPointcutName, $this->currentAspectName, $ex->getMessage());
+        }
+    }
+    
+    /**
+     * Processes a token.
+     * 
+     * @param array $token The token to pass to the parser.
+     * @return void
+     * @throws PointcutParsingException If the parser fails to process the given token.
+     */
+    protected function processToken($token) {
+        $this->parser->process($token);
     }
     
     /**
      * {@inheritdoc}
      */
-    public function parse($explodedName, $originalName, $pointcutExpression): PointcutInterface {
+    public function parse($aspectName, $explodedName, $originalName, $pointcutExpression): PointcutInterface {
         $pointcutName = $explodedName[1] ?? NULL;
         if (empty($pointcutName)) {
             throw new PointcutParsingException(sprintf('Pointcut name token for pointcut method "%s" is empty.', $originalName));
         }
         
+        $this->currentPointcutName = $pointcutName;
+        $this->currentAspectName = $aspectName;
+        
         $length = strlen($pointcutExpression);
         for ($i = 0; $i < $length; $i++) {
             $char = $pointcutExpression[$i];
-            $this->FSM->process($char);
+            $this->processLexerData([
+                'char' => $char,
+                'pos' => $i,
+                'parser' => $this->parser,
+                'is_last_char' => $i == $length - 1
+            ]);
         }
+        
+        $this->lexer->setState(TokenStartState::class);
+        $this->parser->setState(NewTokenToParseState::class);
+        
+        /* @var $pointcut PointcutInterface */
+        $pointcut = $this->parser->getData('pointcut');
+        return $pointcut;
     }
 
 }

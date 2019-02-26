@@ -40,12 +40,13 @@ interface PointcutExpressionParserInterface {
     /**
      * Parses a pointcut.
      * 
+     * @param string $aspectName The name of the aspect.
      * @param array $explodedName An array of exploded parts which form the name of the pointcut method.
      * @param string $originalName The original name of the pointcut method.
      * @param string $pointcutExpression The pointcut expression to parse.
      * @return PointcutInterface The parsed pointcut.
      * @throws AspectMetadataParsingException If the parsing process fails due to invalid syntax or for some other reason.
      */
-    public function parse($explodedName, $originalName, $pointcutExpression): PointcutInterface;
+    public function parse($aspectName, $explodedName, $originalName, $pointcutExpression): PointcutInterface;
     
 }

@@ -39,9 +39,29 @@ interface DistributedTransitionLogicFiniteStateMachineInterface {
     /**
      * Changes the state of the state machine.
      * 
-     * @param StateInterface $state The next state.
+     * @param string|StateInterface $state The next state.
      * @return void
      */
-    public function setState(StateInterface $state);
+    public function setState($state);
+    
+    /**
+     * Sets data to the state machine.
+     * 
+     * @param string $key The key of the data.
+     * @param mixed $data The data to pass to the state machine.
+     *                                   If a callable is given, it MUST be called with an `$oldData` parameter containing the old data corresponding
+     *                                   to the key or NULL if no data to the corresponding key have been set yet. The return value of the callable
+     *                                   MUST be used as the value to set.
+     * @return void
+     */
+    public function setData($key, $data);
+    
+    /**
+     * Retrieves data from the state machine.
+     * 
+     * @param string $key The key of the data to retrieve.
+     * @return mixed The data corresponding to the given key. NULL if no data is defined for the given key.
+     */
+    public function getData($key);
     
 }
