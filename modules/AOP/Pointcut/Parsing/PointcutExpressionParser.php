@@ -111,7 +111,7 @@ class PointcutExpressionParser implements PointcutExpressionParserInterface {
             $this->lexer->process($data);
         }
         catch (PointcutParsingException $ex) {
-            throw new PointcutParsingException('Lexer error for pointcut "%s" of aspect "%s": %s', $this->currentPointcutName, $this->currentAspectName, $ex->getMessage());
+            throw new PointcutParsingException(sprintf('Lexer error for pointcut "%s" of aspect "%s": %s', $this->currentPointcutName, $this->currentAspectName, $ex->getMessage()));
         }
     }
     

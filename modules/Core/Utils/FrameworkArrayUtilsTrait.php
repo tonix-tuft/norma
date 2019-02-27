@@ -112,10 +112,10 @@ trait FrameworkArrayUtilsTrait {
     
     /**
      * Given an array and a list of keys, returns whether at least one of the given keys is empty
-     * or not in the given array.
+     * or does not exist in the given array.
      * 
      * @param array $array The array.
-     * @param array $keys The list of keys
+     * @param array $keys The list of keys.
      * @return mixed Returns the key which is empty in the given array, FALSE otherwise.
      *                         Note that this function may return the value 0 if 0 is one of the keys of the array.
      *                         0 would be considered FALSE if not using the `===` operator, therefore using the
@@ -125,6 +125,26 @@ trait FrameworkArrayUtilsTrait {
     private function atLeastOneArrayKeyIsEmpty(array $array, array $keys) {
         foreach ($keys as $key) {
             if (empty($array[$key])) {
+                return $key;
+            }
+        }
+        return FALSE;
+    }
+    
+    /**
+     * Given an array and a list of keys, tests if at least one of the given keys does not exist in the given array.
+     * 
+     * @param array $array The array.
+     * @param array $keys The list of keys.
+     * @return mixed Returns the key which does not exist in the given array, FALSE otherwise.
+     *                         Note that this function may return the value 0 if 0 is one of the keys of the array.
+     *                         0 would be considered FALSE if not using the `===` operator, therefore using the
+     *                         `===` operator on the return value to make assumptions is recommended when using
+     *                         this method.
+     */
+    private function atLeastOneArrayKeyDoesNotExist(array $array, array $keys) {
+        foreach ($keys as $key) {
+            if (!array_key_exists($key, $array)) {
                 return $key;
             }
         }

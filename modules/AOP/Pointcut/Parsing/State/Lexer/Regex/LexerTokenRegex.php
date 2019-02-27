@@ -59,9 +59,9 @@ final class LexerTokenRegex {
     /**
      * Regular expression to match a namespace pattern.
      * 
-     * @see https://regex101.com/r/lzuWh8/11
+     * @see https://regex101.com/r/lzuWh8/12
      */
-    const TOKEN_NAMESPACE_PATTERN_REGEX = '#
+    const TOKEN_NAMESPACE_PATTERN_REGEX = '~
         (?(DEFINE)
            
            # OK start char.
@@ -79,8 +79,9 @@ final class LexerTokenRegex {
            )
     
            # NS separator.
+           # `[\\\\]` becomes `[\\]` after the interpreter interprets the string and passes it to `preg_*` functions.
            (?<NS_SEPARATOR>
-               [\\]
+               [\\\\]
            )
     
            # `*` wildcard char.
@@ -125,14 +126,14 @@ final class LexerTokenRegex {
         (?!(?&RESERVED_TOKEN)(?&NS_SEPARATOR))
         (?!.*(?&NS_SEPARATOR)(?&RESERVED_TOKEN)(?&NS_SEPARATOR))
         (?!(?&WILDCARD)$)
-        #x';
+        ~x';
     
     /**
      * Regular expression to match a name pattern.
      * 
      * @see https://regex101.com/r/Kyts0e/7
      */
-    const TOKEN_NAME_PATTERN_REGEX = '#
+    const TOKEN_NAME_PATTERN_REGEX = '~
         (?(DEFINE)
            
            # OK start char.
@@ -182,7 +183,7 @@ final class LexerTokenRegex {
         (?=(?&OK_START_CHAR))
         (?!.*(?&WILDCARD){2,})
         (?!(?&RESERVED_TOKEN)$)
-        #x';
+        ~x';
     
     /**
      * Regular expression to match a `public` member access modifier keyword.

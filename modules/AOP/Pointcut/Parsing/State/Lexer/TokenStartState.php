@@ -58,7 +58,8 @@ class TokenStartState extends AbstractLexerState {
                         'pos' => $oldData['pos']
                     ];
                 });
-                $parserFSM->setData('token', $lexerFSM->getData('token'));
+                $token = $lexerFSM->getData('token');
+                $parserFSM->setData('token', $token);
                 if ($isLastChar) {
                     $lexerFSM->setState(LexerEndState::class);
                 }
@@ -82,8 +83,10 @@ class TokenStartState extends AbstractLexerState {
                 if ($isLastChar) {
                     if (strlen($doubleChar) > 1) {
                         $tokenLabel = $this->tokenLabel($tokenType);
-                        throw new PointcutParsingException('Incomplete %s token at position %s.', $tokenLabel, $pos);
+                        throw new PointcutParsingException(sprintf('Incomplete %s token at position %s.', $tokenLabel, $pos));
                     }
+                    $token = $lexerFSM->getData('token');
+                    $parserFSM->setData('token', $token);
                     $lexerFSM->setState(LexerEndState::class);
                 }
                 else {

@@ -179,7 +179,7 @@ class DIContainerAwareFiniteStateMachineFactory implements FiniteStateMachineFac
              */
             public function setState($state) {
                 /* @var $nextState StateInterface */
-                $nextState = $this->getState($state);
+                $nextState = $this->getStateInstance($state);
                 $this->state = $nextState;
             }
 

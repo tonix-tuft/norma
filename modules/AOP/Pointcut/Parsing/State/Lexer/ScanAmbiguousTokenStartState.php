@@ -242,10 +242,10 @@ class ScanAmbiguousTokenStartState extends AbstractLexerState {
             $intruder = $this->findTheIntruder($lexeme, $tokenStartPos);
             if ($intruder !== NULL) {
                 list($invalidChar, $invalidCharPos) = $intruder;
-                throw new PointcutParsingException('Invalid character "%s" for ambiguous token lexeme "%s" at position %s.', $invalidChar, $lexeme, $invalidCharPos);
+                throw new PointcutParsingException(sprintf('Invalid character "%s" for ambiguous token lexeme "%s" at position %s.', $invalidChar, $lexeme, $invalidCharPos));
             }
             else {
-                throw new PointcutParsingException('Ambiguous token starting at position %s contains an invalid character which cannot be identified.', $tokenStartPos);
+                throw new PointcutParsingException(sprintf('Ambiguous token starting at position %s contains an invalid character which cannot be identified.', $tokenStartPos));
             }
         }
         

@@ -29,7 +29,6 @@ namespace Norma\AOP\Pointcut\Parsing\State\Lexer;
 
 use Norma\State\FSM\StateInterface;
 use Norma\State\FSM\DistributedTransitionLogicFiniteStateMachineInterface;
-use Norma\AOP\Pointcut\Parsing\PointcutParsingException;
 use Norma\Core\Utils\FrameworkArrayUtilsTrait;
 use Norma\AOP\Pointcut\Parsing\TokenTypeEnum;
 use Norma\AOP\Pointcut\Parsing\PointcutParsingException;
@@ -118,7 +117,7 @@ abstract class AbstractLexerState implements StateInterface {
             throw new PointcutParsingException('The lexer received no input.');
         }
         
-        $emptyKey = $this->atLeastOneArrayKeyIsEmpty($input, static::REQUIRED_INPUT_KEYS);
+        $emptyKey = $this->atLeastOneArrayKeyDoesNotExist($input, static::REQUIRED_INPUT_KEYS);
         if (
             $emptyKey !== FALSE
         ) {
@@ -129,7 +128,7 @@ abstract class AbstractLexerState implements StateInterface {
         $pos = $input['pos'];
         $parserFSM = $input['parser'];
         $isLastChar = $input['is_last_char'];
-        $this->processChar($FSM, $char, $pos, $parserFSM, $isLastChar);
+        $this->processChar($char, $pos, $FSM, $parserFSM, $isLastChar);
     }
     
     /**

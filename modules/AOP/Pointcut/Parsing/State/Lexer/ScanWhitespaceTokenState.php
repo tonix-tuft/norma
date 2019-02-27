@@ -49,7 +49,14 @@ class ScanWhitespaceTokenState extends AbstractLexerState {
                     'lexeme' => $oldData['lexeme'] . $char
                 ]);
             });
-            $lexerFSM->setState($isLastChar ? LexerEndState::class : ScanWhitespaceTokenState::class);
+            if ($isLastChar) {
+                $token = $lexerFSM->getData('token');
+                $parserFSM->setData('token', $token);
+                $lexerFSM->setState(LexerEndState::class);
+            }
+            else {
+                $lexerFSM->setState($this);
+            }
         }
         else {
             $token = $lexerFSM->getData('token');

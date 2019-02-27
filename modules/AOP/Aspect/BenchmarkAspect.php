@@ -107,7 +107,7 @@ class BenchmarkAspect implements AspectInterface {
      * return '{static Some*\NamespaceName\**Test+}'; // 5) Static initialization (class loaded into memory by PHP for the first time, similar to the static block construct of Java).
      */
     public function pointcut pointcutName1() {
-        return '{public TestClass->*()}';
+        return '   {       public      TestClass      ->  *   () }   ';
     }
     
     /**

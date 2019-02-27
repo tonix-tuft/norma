@@ -27,13 +27,23 @@
 
 namespace Norma\AOP\Pointcut\Parsing\State\Parser;
 
+use Norma\State\FSM\StateInterface;
+use Norma\State\FSM\DistributedTransitionLogicFiniteStateMachineInterface;
+
 /**
  * New token to parse parser's state.
  *
  * @author Anton Bagdatyev (Tonix-Tuft) <antonytuft@gmail.com>
  */
-class NewTokenToParseState {
+class NewTokenToParseState implements StateInterface {
     
-    // TODO
-    
+    /**
+     * {@inheritdoc}
+     */
+    public function process(DistributedTransitionLogicFiniteStateMachineInterface $FSM, $input = NULL) {
+        // TODO
+        $dummy = NULL;
+        var_dump($input);
+    }
+
 }
