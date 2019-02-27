@@ -239,11 +239,50 @@ class ScanAmbiguousTokenStartState extends AbstractLexerState {
         
         if (is_null($tokenType)) {
             $tokenStartPos = $currentLexerToken['pos'];
-            throw new PointcutParsingException('Ambiguous token starting at position %s contains an invalid character.', $tokenStartPos);
+            $intruder = $this->findTheIntruder($lexeme, $tokenStartPos);
+            if ($intruder !== NULL) {
+                list($invalidChar, $invalidCharPos) = $intruder;
+                throw new PointcutParsingException('Invalid character "%s" for ambiguous token lexeme "%s" at position %s.', $invalidChar, $lexeme, $invalidCharPos);
+            }
+            else {
+                throw new PointcutParsingException('Ambiguous token starting at position %s contains an invalid character which cannot be identified.', $tokenStartPos);
+            }
         }
         
         $currentLexerToken['type'] = $tokenType;
         $parserFSM->setData('token', $currentLexerToken);
+    }
+    
+    /**
+     * Finds an intruder character as well as its position within the pointcut expression.
+     * 
+     * @param string $lexeme The token's lexeme.
+     * @param int $tokenStartPos The token initial position.
+     * @return array|null If the intruder character is found, an array of two elements, intruder character at index 0
+     *                                 and its position within the pointcut expression at index 1 is returned.
+     *                                 Otherwise, if the intruder is not found, NULL is returned.
+     */
+    protected function findTheIntruder($lexeme, $tokenStartPos) {
+        $len = strlen($lexeme);
+        for ($i = 0; $i < $len; $i++) {
+            $lexemeChar = $lexeme[$i];
+            $match = FALSE;
+            $onMatch = function() use ($match) {
+                $match = TRUE;
+            };
+            
+            preg_replace_callback_array([
+                LexerTokenRegex::TOKEN_WILDCARD_REGEX => $onMatch,
+                LexerTokenRegex::TOKEN_NAMESPACE_PATTERN_REGEX => $onMatch,
+                LexerTokenRegex::TOKEN_NAME_PATTERN_REGEX => $onMatch,
+                LexerTokenRegex::TOKEN_POINTCUT_IDENTIFIER_REGEX => $onMatch,
+            ], $lexemeChar);
+            
+            if (!$match) {
+                return [$lexemeChar, $tokenStartPos + $i];
+            }
+        }
+        return NULL;
     }
     
 }
