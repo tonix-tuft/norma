@@ -46,12 +46,12 @@ abstract class TokenTypeEnum {
     /**
      * Simple pointcut open delimiter (`{`).
      */
-    const TOKEN_SIMPLE_POINTCUT_OPEN_DELIMITER = 2;
+    const TOKEN_POINTCUT_OPEN_DELIMITER = 2;
     
     /**
      * Simple pointcut closing delimiter (`}`).
      */
-    const TOKEN_SIMPLE_POINTCUT_CLOSE_DELIMITER = 3;
+    const TOKEN_POINTCUT_CLOSE_DELIMITER = 3;
     
     /**
      * Namespace pattern token.

@@ -165,7 +165,7 @@ class ScanAmbiguousTokenStartState extends AbstractLexerState {
             preg_match(LexerTokenRegex::TOKEN_READ_ACCESS_OPERATION_REGEX, $lexeme)
             &&
             (
-                $lastNonWhitespaceTokenBeforeCurrentType === TokenTypeEnum::TOKEN_SIMPLE_POINTCUT_OPEN_DELIMITER
+                $lastNonWhitespaceTokenBeforeCurrentType === TokenTypeEnum::TOKEN_POINTCUT_OPEN_DELIMITER
                 ||
                 $lastNonWhitespaceTokenBeforeCurrentType === TokenTypeEnum::TOKEN_PROPERTY_KEYWORD
             )
@@ -177,7 +177,7 @@ class ScanAmbiguousTokenStartState extends AbstractLexerState {
             preg_match(LexerTokenRegex::TOKEN_WRITE_ACCESS_OPERATION_REGEX, $lexeme)
             &&
             (
-                $lastNonWhitespaceTokenBeforeCurrentType === TokenTypeEnum::TOKEN_SIMPLE_POINTCUT_OPEN_DELIMITER
+                $lastNonWhitespaceTokenBeforeCurrentType === TokenTypeEnum::TOKEN_POINTCUT_OPEN_DELIMITER
                 ||
                 $lastNonWhitespaceTokenBeforeCurrentType === TokenTypeEnum::TOKEN_PROPERTY_KEYWORD
             )
@@ -188,14 +188,14 @@ class ScanAmbiguousTokenStartState extends AbstractLexerState {
         else if (
             preg_match(LexerTokenRegex::TOKEN_METHOD_KEYWORD_REGEX, $lexeme)
             &&
-            $lastNonWhitespaceTokenBeforeCurrentType === TokenTypeEnum::TOKEN_SIMPLE_POINTCUT_OPEN_DELIMITER
+            $lastNonWhitespaceTokenBeforeCurrentType === TokenTypeEnum::TOKEN_POINTCUT_OPEN_DELIMITER
         ) {
             $tokenType = TokenTypeEnum::TOKEN_METHOD_KEYWORD;
         }
         else if (
             preg_match(LexerTokenRegex::TOKEN_PROPERTY_KEYWORD_REGEX, $lexeme)
             &&
-            $lastNonWhitespaceTokenBeforeCurrentType === TokenTypeEnum::TOKEN_SIMPLE_POINTCUT_OPEN_DELIMITER
+            $lastNonWhitespaceTokenBeforeCurrentType === TokenTypeEnum::TOKEN_POINTCUT_OPEN_DELIMITER
         ) {
             $tokenType = TokenTypeEnum::TOKEN_PROPERTY_KEYWORD;
         }
@@ -245,7 +245,7 @@ class ScanAmbiguousTokenStartState extends AbstractLexerState {
                 throw new PointcutParsingException(sprintf('Invalid character "%s" for ambiguous token lexeme "%s" at position %s.', $invalidChar, $lexeme, $invalidCharPos));
             }
             else {
-                throw new PointcutParsingException(sprintf('Ambiguous token starting at position %s contains an invalid character which cannot be identified.', $tokenStartPos));
+                throw new PointcutParsingException(sprintf('Ambiguous token lexeme "%s" starting at position %s contains an invalid character.', $lexeme, $tokenStartPos));
             }
         }
         
@@ -267,7 +267,7 @@ class ScanAmbiguousTokenStartState extends AbstractLexerState {
         for ($i = 0; $i < $len; $i++) {
             $lexemeChar = $lexeme[$i];
             $match = FALSE;
-            $onMatch = function() use ($match) {
+            $onMatch = function() use (&$match) {
                 $match = TRUE;
             };
             

@@ -93,7 +93,7 @@ class BenchmarkAspect implements AspectInterface {
      * 
      * return '{* public TestClass->property}'; // 2) Property access (read/write)
      * return '{read public TestClass+->property}'; // 2.1) Property access (read)
-     * return '{read public TestClass::$property}'; // 2.2) Static property access (read)
+     * return '{read public TestClass::property}'; // 2.2) Static property access (read)
      * return '{write * TestClass->property}'; // 2.3) Property access (write)
      * return '{write * TestClass::property}'; // 2.4) Static property access (write)
      * 
@@ -107,7 +107,7 @@ class BenchmarkAspect implements AspectInterface {
      * return '{static Some*\NamespaceName\**Test+}'; // 5) Static initialization (class loaded into memory by PHP for the first time, similar to the static block construct of Java).
      */
     public function pointcut pointcutName1() {
-        return '   {       public      TestClass      ->  *   () }   ';
+        return '{public TestClass->*()}';
     }
     
     /**

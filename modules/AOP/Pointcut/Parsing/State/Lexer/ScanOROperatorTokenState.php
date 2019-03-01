@@ -33,6 +33,7 @@ use Norma\AOP\Pointcut\Parsing\State\Lexer\Regex\LexerTokenRegex;
 use Norma\AOP\Pointcut\Parsing\TokenTypeEnum;
 use Norma\AOP\Pointcut\Parsing\State\Lexer\TokenStartState;
 use Norma\AOP\Pointcut\Parsing\State\Lexer\LexerEndState;
+use Norma\AOP\Pointcut\Parsing\PointcutParsingException;
 
 /**
  * OR operator token scanning state.
@@ -48,8 +49,8 @@ class ScanOROperatorTokenState extends AbstractLexerState {
         $token = $lexerFSM->getData('token');
         $lexeme = $token['lexeme'] . $char;
         if (!preg_match(LexerTokenRegex::TOKEN_OR_OPERATOR_REGEX, $lexeme)) {
-            $tokenLabel = $this->tokenLabel(TokenTypeEnum::TOKEN_OR_OPERATOR);
-            throw new Norma\AOP\Pointcut\Parsing\PointcutParsingException(
+            $tokenLabel = static::tokenLabel(TokenTypeEnum::TOKEN_OR_OPERATOR);
+            throw new PointcutParsingException(
                 sprintf('Unexpected character "%s" while parsing %s token at position %s.', $char, $tokenLabel, $pos)
             );
         }

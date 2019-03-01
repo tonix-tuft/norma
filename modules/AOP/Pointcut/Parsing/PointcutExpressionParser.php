@@ -35,6 +35,7 @@ use Norma\AOP\Pointcut\Parsing\TokenTypeEnum;
 use Norma\AOP\Pointcut\PointcutInterface;
 use Norma\State\FSM\FiniteStateMachineFactoryInterface;
 use Norma\State\FSM\FiniteStateMachineInterface;
+use Norma\AOP\Pointcut\Parsing\State\Lexer\AbstractLexerState;
 
 /**
  * The implementation of a pointcut parser.
@@ -94,8 +95,9 @@ class PointcutExpressionParser implements PointcutExpressionParserInterface {
         $parser->onData('token', function($token) use ($lexer, $that) {
             if ($token['type'] !== TokenTypeEnum::TOKEN_WHITESPACE) {
                 $lexer->setData('last_non_whitespace_token_before_current', $token);
+                $token['label'] = AbstractLexerState::tokenLabel($token['type']);
+                $that->processToken($token);
             }
-            $that->processToken($token);
         });
     }
     

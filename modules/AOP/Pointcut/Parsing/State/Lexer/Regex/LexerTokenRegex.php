@@ -49,12 +49,12 @@ final class LexerTokenRegex {
     /**
      * Regular expression to match a simple pointcut opening delimiter.
      */
-    const TOKEN_SIMPLE_POINTCUT_OPEN_DELIMITER_REGEX = '#^{$#';
+    const TOKEN_POINTCUT_OPEN_DELIMITER_REGEX = '#^{$#';
     
     /**
      * Regular expression to match a simple pointcut closing delimiter.
      */
-    const TOKEN_SIMPLE_POINTCUT_CLOSE_DELIMITER_REGEX = '#^}$#';
+    const TOKEN_POINTCUT_CLOSE_DELIMITER_REGEX = '#^}$#';
     
     /**
      * Regular expression to match a namespace pattern.

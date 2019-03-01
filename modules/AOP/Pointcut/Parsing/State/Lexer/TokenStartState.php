@@ -82,7 +82,7 @@ class TokenStartState extends AbstractLexerState {
                 });
                 if ($isLastChar) {
                     if (strlen($doubleChar) > 1) {
-                        $tokenLabel = $this->tokenLabel($tokenType);
+                        $tokenLabel = static::tokenLabel($tokenType);
                         throw new PointcutParsingException(sprintf('Incomplete %s token at position %s.', $tokenLabel, $pos));
                     }
                     $token = $lexerFSM->getData('token');

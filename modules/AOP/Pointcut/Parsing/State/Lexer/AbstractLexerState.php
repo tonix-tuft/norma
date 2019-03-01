@@ -58,8 +58,8 @@ abstract class AbstractLexerState implements StateInterface {
      * A constant array which maps every unambiguous single character token type to its corresponding regex.
      */
     const UNAMBIGUOUS_SINGLE_CHAR_TOKENS_MAP = [
-        TokenTypeEnum::TOKEN_SIMPLE_POINTCUT_OPEN_DELIMITER => LexerTokenRegex::TOKEN_SIMPLE_POINTCUT_OPEN_DELIMITER_REGEX,
-        TokenTypeEnum::TOKEN_SIMPLE_POINTCUT_CLOSE_DELIMITER => LexerTokenRegex::TOKEN_SIMPLE_POINTCUT_CLOSE_DELIMITER_REGEX,
+        TokenTypeEnum::TOKEN_POINTCUT_OPEN_DELIMITER => LexerTokenRegex::TOKEN_POINTCUT_OPEN_DELIMITER_REGEX,
+        TokenTypeEnum::TOKEN_POINTCUT_CLOSE_DELIMITER => LexerTokenRegex::TOKEN_POINTCUT_CLOSE_DELIMITER_REGEX,
         TokenTypeEnum::TOKEN_NAMESPACE_IDENTIFIER_PLUS_OPERATOR => LexerTokenRegex::TOKEN_NAMESPACE_IDENTIFIER_PLUS_OPERATOR_REGEX,
         TokenTypeEnum::TOKEN_ANNOTATION_START => LexerTokenRegex::TOKEN_ANNOTATION_START_REGEX,
         TokenTypeEnum::TOKEN_NOT_OPERATOR => LexerTokenRegex::TOKEN_NOT_OPERATOR_REGEX,
@@ -105,7 +105,7 @@ abstract class AbstractLexerState implements StateInterface {
     /**
      * @var array|null
      */
-    protected $inversedTokenTypeEnumConsts = NULL;
+    protected static $inversedTokenTypeEnumConsts = NULL;
     
     /**
      * {@inheritdoc}
@@ -138,14 +138,14 @@ abstract class AbstractLexerState implements StateInterface {
      * @return string The label of the token.
      * @throws PointcutParsingException If a token type is unknown.
      */
-    protected function tokenLabel($tokenType) {
-        if (!$this->inversedTokenTypeEnumConsts) {
+    public static function tokenLabel($tokenType) {
+        if (!static::$inversedTokenTypeEnumConsts) {
             $reflectionClass = new \ReflectionClass(TokenTypeEnum::class);
             $tokenConsts = $reflectionClass->getConstants();
-            $this->inversedTokenTypeEnumConsts = array_flip($tokenConsts);
+            static::$inversedTokenTypeEnumConsts = array_flip($tokenConsts);
         }
-        if (isset($this->inversedTokenTypeEnumConsts[$tokenType])) {
-            return $this->inversedTokenTypeEnumConsts[$tokenType];
+        if (isset(static::$inversedTokenTypeEnumConsts[$tokenType])) {
+            return static::$inversedTokenTypeEnumConsts[$tokenType];
         }
         else {
             throw new PointcutParsingException(sprintf('Could not lookup token label. Unknown token type "%s".', $tokenType));
