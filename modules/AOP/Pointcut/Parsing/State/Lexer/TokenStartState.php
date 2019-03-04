@@ -97,13 +97,6 @@ class TokenStartState extends AbstractLexerState {
         }
         
         // Remaining ambiguous characters.
-        $lexerFSM->setData('token', function($oldData) use ($char) {
-            return [
-                'type' => NULL, // Token type is unknown yet.
-                'lexeme' => $oldData['lexeme'] . $char,
-                'pos' => $oldData['pos']
-            ];
-        });
         $lexerFSM->setState(ScanAmbiguousTokenStartState::class);
         if ($isLastChar) {
             $lexerFSM->setData('reiterate', [
@@ -111,6 +104,15 @@ class TokenStartState extends AbstractLexerState {
                 'pos' => $pos,
                 'is_last_char' => $isLastChar
             ]);
+        }
+        else {
+            $lexerFSM->setData('token', function($oldData) use ($char) {
+                return [
+                    'type' => NULL, // Token type is unknown yet.
+                    'lexeme' => $oldData['lexeme'] . $char,
+                    'pos' => $oldData['pos']
+                ];
+            });
         }
     }
 
