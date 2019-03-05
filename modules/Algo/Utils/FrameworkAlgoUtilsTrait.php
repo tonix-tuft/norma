@@ -25,7 +25,7 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Norma\Core\Utils;
+namespace Norma\Algo\Utils;
 
 /**
  * A trait containing useful methods concerning algorithms shared across multiple Norma's framework components.
