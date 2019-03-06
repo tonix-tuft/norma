@@ -92,7 +92,7 @@ class UseStatementsParser implements UseStatementsParserInterface {
         if (!file_exists($absoluteFilenameToCheck)) {
             $useStatements = $this->parseUseStatementsFromSource(file_get_contents($filename), $namespaceTrim);
             
-            $closureSync = \Closure::bind(function() use ($useStatements, $absoluteFilenameToCheck, $absoluteFilenameToCheck) {
+            $closureSync = \Closure::bind(function() use ($useStatements, $absoluteFilenameToCheck) {
                 $export = var_export($useStatements, TRUE);
                 $phpCode = <<<HERECODE
 <?php
