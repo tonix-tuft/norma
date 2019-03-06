@@ -31,7 +31,7 @@ use Norma\HTTP\Response\Range\RangeRequestAwareStreamedResponseInterface;
 use Norma\HTTP\Response\StreamedResponse;
 use Norma\HTTP\Request\Server\ServerRequestInterface;
 use Norma\HTTP\Request\RequestMethodEnum;
-use Norma\Core\Utils\FrameworkAlgoUtilsTrait;
+use Norma\Algorithm\Utils\FrameworkAlgorithmUtilsTrait;
 use Norma\HTTP\HTTPStatusCodeEnum;
 use Norma\HTTP\HTTPTrait;
 use Psr\Http\Message\StreamInterface;
@@ -43,7 +43,7 @@ use Psr\Http\Message\StreamInterface;
  */
 class ByteRangeRequestAwareStreamedResponse extends StreamedResponse implements RangeRequestAwareStreamedResponseInterface {
     
-    use FrameworkAlgoUtilsTrait;
+    use FrameworkAlgorithmUtilsTrait;
     use HTTPTrait;
     
     /**

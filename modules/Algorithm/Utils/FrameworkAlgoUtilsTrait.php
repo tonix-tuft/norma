@@ -25,14 +25,14 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Norma\Algo\Utils;
+namespace Norma\Algorithm\Utils;
 
 /**
  * A trait containing useful methods concerning algorithms shared across multiple Norma's framework components.
  *
  * @author Anton Bagdatyev (Tonix-Tuft) <antonytuft@gmail.com>
  */
-trait FrameworkAlgoUtilsTrait {
+trait FrameworkAlgorithmUtilsTrait {
     
     /**
      * Merge the given array of segments and return a new array with groups of overlapping segments merged into one segment.
