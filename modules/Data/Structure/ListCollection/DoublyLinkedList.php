@@ -58,7 +58,7 @@ class DoublyLinkedList implements DoublyLinkedListInterface {
     protected $currentPosition;
     
     /**
-     * @var ListNodeInterface|null
+     * @var DoublyLinkedListNodeInterface|null
      */
     protected $current;
     
@@ -112,7 +112,7 @@ class DoublyLinkedList implements DoublyLinkedListInterface {
      * {@inheritdoc}
      */
     public function first(): ListNodeInterface {
-        if ($this->has($this->head)) {
+        if ($this->head !== NULL) {
             return $this->listMap[$this->head];
         }
         return NULL;
@@ -171,7 +171,7 @@ class DoublyLinkedList implements DoublyLinkedListInterface {
      * {@inheritdoc}
      */
     public function last(): ListNodeInterface {
-        if ($this->has($this->tail)) {
+        if ($this->tail !== NULL) {
             return $this->listMap[$this->tail];
         }
         return NULL;
@@ -183,7 +183,7 @@ class DoublyLinkedList implements DoublyLinkedListInterface {
     public function push($element): ListNodeInterface {
         $newNode = $this->makeNewNode($element);
         
-        if ($this->has($this->tail)) {
+        if ($this->tail !== NULL) {
             /* @var $tailNode DoublyLinkedListNodeInterface */
             $tailNode = $this->listMap[$this->tail];
             $tailNode->setNext($newNode);
@@ -191,7 +191,7 @@ class DoublyLinkedList implements DoublyLinkedListInterface {
         }
         $this->tail = $newNode;
         
-        if (!$this->has($this->head)) {
+        if ($this->head === NULL) {
             $this->head = $newNode;
         }
         
@@ -238,7 +238,7 @@ class DoublyLinkedList implements DoublyLinkedListInterface {
     public function unshift($element): ListNodeInterface {
         $newNode = $this->makeNewNode($element);
         
-        if ($this->has($this->head)) {
+        if ($this->head !== NULL) {
             /* @var $headNode DoublyLinkedListNodeInterface */
             $headNode = $this->listMap[$this->head];
             $headNode->setPrev($newNode);
@@ -246,7 +246,7 @@ class DoublyLinkedList implements DoublyLinkedListInterface {
         }
         $this->head = $newNode;
         
-        if (!$this->has($this->tail)) {
+        if ($this->tail === NULL) {
             $this->tail = $newNode;
         }
         
@@ -304,7 +304,7 @@ class DoublyLinkedList implements DoublyLinkedListInterface {
      * {@inheritdoc}
      */
     public function valid(): bool {
-        return $this->has($this->current);
+        return $this->current !== NULL;
     }
 
     /**

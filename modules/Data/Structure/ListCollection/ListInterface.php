@@ -34,7 +34,7 @@ use Norma\Data\Structure\ListCollection\ListNodeInterface;
  *
  * @author Anton Bagdatyev (Tonix-Tuft) <antonytuft@gmail.com>
  */
-interface ListInterface extends \Iterator {
+interface ListInterface extends \Iterator, \Countable {
     
     /**
      * Pushes an element at the end of the list.
@@ -94,13 +94,6 @@ interface ListInterface extends \Iterator {
      * @throws \OutOfBoundsException If the given node does not exist in the list.
      */
     public function insertBefore(ListNodeInterface $node, $element): ListNodeInterface;
-    
-    /**
-     * Returns the number of elements in the list.
-     * 
-     * @return int The number of elements in the list.
-     */
-    public function count(): int;
     
     /**
      * Tests if the list is empty.
