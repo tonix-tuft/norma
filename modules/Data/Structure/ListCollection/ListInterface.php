@@ -34,7 +34,7 @@ use Norma\Data\Structure\ListCollection\ListNodeInterface;
  *
  * @author Anton Bagdatyev (Tonix-Tuft) <antonytuft@gmail.com>
  */
-interface ListInterface {
+interface ListInterface extends \Iterator {
     
     /**
      * Pushes an element at the end of the list.

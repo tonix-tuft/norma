@@ -27,7 +27,6 @@
 
 namespace Norma\Data\Structure\ListCollection;
 
-use Norma\Data\Structure\ListCollection\ListInterface;
 use Norma\Data\Structure\ListCollection\ListNodeInterface;
 use Norma\Data\Structure\ListCollection\DoublyLinkedListNodeInterface;
 
@@ -36,7 +35,7 @@ use Norma\Data\Structure\ListCollection\DoublyLinkedListNodeInterface;
  *
  * @author Anton Bagdatyev (Tonix-Tuft) <antonytuft@gmail.com>
  */
-class DoublyLinkedList implements ListInterface {
+class DoublyLinkedList implements DoublyLinkedListInterface {
     
     /**
      * @var ListNodeInterface|null
@@ -54,12 +53,29 @@ class DoublyLinkedList implements ListInterface {
     protected $listMap;
     
     /**
+     * @var int
+     */
+    protected $currentPosition;
+    
+    /**
+     * @var ListNodeInterface|null
+     */
+    protected $current;
+    
+    /**
+     * @var int
+     */
+    protected $iterationMode;
+    
+    /**
      * Constructs a new list.
      */
     public function __construct() {
         $this->head = NULL;
         $this->tail = NULL;
+        $this->current = NULL;
         $this->listMap = new \SplObjectStorage();
+        $this->currentPosition = 0;
     }
     
     /**
@@ -244,6 +260,58 @@ class DoublyLinkedList implements ListInterface {
      */
     public function has(ListNodeInterface $node): bool {
         return isset($this->listMap[$node]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function current() {
+        return $this->current;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function key() {
+        return $this->currentPosition;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function next() {
+        $this->current = 
+                $this->iterationMode === \SplDoublyLinkedList::IT_MODE_FIFO ?
+                $this->current->next()
+                :
+                $this->current->prev();
+        $this->currentPosition++;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function rewind() {
+        $this->current =
+                $this->iterationMode === \SplDoublyLinkedList::IT_MODE_FIFO ?
+                $this->head
+                :
+                $this->tail;
+        $this->currentPosition = 0;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function valid(): bool {
+        return $this->has($this->current);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setIterationMode($mode) {
+        $this->iterationMode = $mode;
     }
 
 }
