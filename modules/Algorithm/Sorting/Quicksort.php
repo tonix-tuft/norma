@@ -91,7 +91,7 @@ class Quicksort extends AbstractSortingAlgorithm {
         else if (!$arrayIsAlready0BasedWithLinearIndices) {
             $array = array_values($array);
         }
-            
+        
         $comparatorFn = $this->comparator($comparator);
         
         // Two arrays used as stacks for partition indices to avoid recursion.
