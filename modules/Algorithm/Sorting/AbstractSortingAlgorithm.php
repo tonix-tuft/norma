@@ -50,6 +50,25 @@ abstract class AbstractSortingAlgorithm implements SortingAlgorithmInterface {
     }
     
     /**
+     * Obtains a comparator to use for sorting.
+     * 
+     * @param callable|null $comparator NULL for a default comparator, callable for a custom one.
+     * @return callable The callable comparator to use for sorting.
+     * @throws \InvalidArgumentException If the given comparator is not NULL and is not a callable.
+     */
+    protected function comparator($comparator) {
+        $comparatorFn = NULL;
+        if ($comparator === NULL) {
+            $comparatorFn = $this->defaultComparator();
+        }
+        else {
+            $this->throwExceptionIfInvalidComparator($comparator);
+            $comparatorFn = $comparator;
+        }
+        return $comparatorFn;
+    }
+    
+    /**
      * Throws an exception if the given comparator is not callable.
      * 
      * If this method does not throw an exception, the caller is guaranteed that the given

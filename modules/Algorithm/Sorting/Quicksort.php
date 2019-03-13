@@ -48,17 +48,13 @@ class Quicksort extends AbstractSortingAlgorithm {
      */
     public function asort(array &$array, $comparator = NULL) {
         $keys = array_keys($array);
-        if ($comparator !== NULL) {
-            $this->throwExceptionIfInvalidComparator($comparator);
-        }
-        else {
-            $comparator = $this->defaultComparator();
-        }
         
-        $this->quicksort($keys, function($keyA, $keyB) use ($comparator, &$array) {
+        $comparatorFn = $this->comparator($comparator);
+        
+        $this->quicksort($keys, function($keyA, $keyB) use ($comparatorFn, &$array) {
             $valueA = $array[$keyA];
             $valueB = $array[$keyB];
-            return $comparator($valueA, $valueB);
+            return $comparatorFn($valueA, $valueB);
         }, TRUE);
         
         $keys = array_flip($keys);
@@ -95,15 +91,8 @@ class Quicksort extends AbstractSortingAlgorithm {
         else if (!$arrayIsAlready0BasedWithLinearIndices) {
             $array = array_values($array);
         }
-        
-        $comparatorFn = NULL;
-        if ($comparator === NULL) {
-            $comparatorFn = $this->defaultComparator();
-        }
-        else {
-            $this->throwExceptionIfInvalidComparator($comparator);
-            $comparatorFn = $comparator;
-        }
+            
+        $comparatorFn = $this->comparator($comparator);
         
         // Two arrays used as stacks for partition indices to avoid recursion.
         $nextPartitionStartIndexStack = [];
