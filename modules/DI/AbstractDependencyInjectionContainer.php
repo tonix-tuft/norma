@@ -836,7 +836,7 @@ abstract class AbstractDependencyInjectionContainer implements DependencyInjecti
         //     https://regex101.com/r/Nut9AP/2 -> For splitting params.
         //     https://regex101.com/r/Nut9AP/3 -> For splitting inject annotations.
         //     https://regex101.com/r/fiKGSc/3 -> For a single inject annotation parse through param annotation. Gives variable name.
-        //     https://regex101.com/r/93u9l5/1 -> For a single inject annotation parse through inject annotation. Gives variable name.
+        //     https://regex101.com/r/93u9l5/2 -> For a single inject annotation parse through inject annotation. Gives variable name.
         //
         $parse = [];
         $docComment = $reflectionFuncOrMethod->getDocComment();
@@ -890,7 +890,7 @@ abstract class AbstractDependencyInjectionContainer implements DependencyInjecti
                                        (?:[^\n]*$)?
                                       )?
                                     )).*
-                                $~msx';
+                                ~msx';
                 $matches = [];
                 preg_match($regex, $paramSubstring, $matches);
                 if (
@@ -979,7 +979,7 @@ abstract class AbstractDependencyInjectionContainer implements DependencyInjecti
                                           [\s]
                                       )
                                     )
-                                $~msx';
+                                ~msx';
                 $matches = [];
                 preg_match($regex, $injectSubstring, $matches);
                 if (
