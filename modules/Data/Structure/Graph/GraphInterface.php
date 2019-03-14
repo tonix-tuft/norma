@@ -95,7 +95,10 @@ interface GraphInterface {
     public function getDensity();
     
     /**
-     * Gets the degree of a vertex.
+     * Gets the degree of a vertex, i.e. the number of edges incident to the vertex,
+     * with loops counted twice.
+     * 
+     * @see https://en.wikipedia.org/wiki/Degree_(graph_theory)
      * 
      * @param VertexInterface $vertex The vertex.
      * @return int The degree of the vertex.
