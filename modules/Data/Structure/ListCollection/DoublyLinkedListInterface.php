@@ -37,13 +37,30 @@ use Norma\Data\Structure\ListCollection\ListInterface;
 interface DoublyLinkedListInterface extends ListInterface {
     
     /**
+     * LIFO iteration mode (stack style).
+     */
+    const ITERATION_MODE_LIFO = 1;
+    
+    /**
+     * FIFO iteration mode (queue style).
+     */
+    const ITERATION_MODE_FIFO = 2;
+    
+    /**
      * Sets the iteration mode of the doubly linked list.
      * 
      * @param int $mode The iteration mode, i.e. either one or the other:
-     *                                - SplDoublyLinkedList::IT_MODE_LIFO (Stack style);
-     *                                - SplDoublyLinkedList::IT_MODE_FIFO (Queue style);
+     *                                - Norma\Data\Structure\ListCollection\DoublyLinkedListInterface::ITERATION_MODE_LIFO (Stack style);
+     *                                - Norma\Data\Structure\ListCollection\DoublyLinkedListInterface::ITERATION_MODE_FIFO (Queue style);
      * @return void
      */
-    public function setIterationMode($mode);
+    public function setIterationMode(int $mode);
+    
+    /**
+     * Gets the iteration mode of the doubly linked list.
+     * 
+     * @return int The iteration mode.
+     */
+    public function getIterationMode();
     
 }

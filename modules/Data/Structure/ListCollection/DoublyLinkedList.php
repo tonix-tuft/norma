@@ -281,7 +281,7 @@ class DoublyLinkedList implements DoublyLinkedListInterface {
      */
     public function next() {
         $this->current = 
-                $this->iterationMode === \SplDoublyLinkedList::IT_MODE_FIFO ?
+                $this->iterationMode === DoublyLinkedListInterface::ITERATION_MODE_FIFO ?
                 $this->current->next()
                 :
                 $this->current->prev();
@@ -293,7 +293,7 @@ class DoublyLinkedList implements DoublyLinkedListInterface {
      */
     public function rewind() {
         $this->current =
-                $this->iterationMode === \SplDoublyLinkedList::IT_MODE_FIFO ?
+                $this->iterationMode === DoublyLinkedListInterface::ITERATION_MODE_FIFO ?
                 $this->head
                 :
                 $this->tail;
@@ -310,8 +310,15 @@ class DoublyLinkedList implements DoublyLinkedListInterface {
     /**
      * {@inheritdoc}
      */
-    public function setIterationMode($mode) {
+    public function setIterationMode(int $mode) {
         $this->iterationMode = $mode;
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function getIterationMode() {
+        return $this->iterationMode;
     }
 
 }
