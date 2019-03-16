@@ -289,6 +289,8 @@ interface GraphInterface {
      * 
      * @see https://en.wikipedia.org/wiki/Degree_(graph_theory)#Degree_sequence
      * @see https://en.wikipedia.org/wiki/Directed_graph#Degree_sequence
+     * 
+     * @return \Iterator The iterator representing the degree sequence of the graph.
      */
     public function getDegreeSequence(): \Iterator;
     
