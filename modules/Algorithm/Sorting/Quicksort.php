@@ -65,6 +65,23 @@ class Quicksort extends AbstractSortingAlgorithm {
     }
     
     /**
+     * {@inheritdoc}
+     */
+    public function ksort(array &$array, $comparator = NULL) {
+        $keys = array_keys($array);
+        
+        $comparatorFn = $this->comparator($comparator);
+        
+        $this->sort($keys, $comparatorFn);
+        
+        $keys = array_flip($keys);
+        foreach ($keys as $key => &$i) {
+            $i = $array[$key];
+        }
+        $array = $keys;
+    }
+    
+    /**
      * Sorts an array using the quicksort algorithm.
      * 
      * @see http://alienryderflex.com/quicksort/

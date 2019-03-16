@@ -66,4 +66,19 @@ interface SortingAlgorithmInterface {
      */
     public function asort(array &$array, $comparator = NULL);
     
+    /**
+     * Sorts an array by its keys using the given comparator.
+     * 
+     * @param array $array The array.
+     * @param callable|null $comparator An optional custom comparator function.
+     *                                                        The comparator function is guaranteed to receive two keys of the array as arguments
+     *                                                        and it must return an integer less than, equal to, or greater than zero if the first argument
+     *                                                        is considered to be respectively less than, equal to, or greater than the second.
+     *                                                        If NULL is given, implementors MUST compare items in ascending order directly comparing
+     *                                                        the keys of the array using comparison operators (`>`, `=>`, `<=`, `<`).
+     * @return void
+     * @throws \InvalidArgumentException If the given comparator function is not NULL and is not a callable.
+     */
+    public function ksort(array &$array, $comparator = NULL);
+    
 }

@@ -46,27 +46,27 @@ interface DirectedGraphInterface extends GraphInterface {
     public function getTranspose(): DirectedGraphInterface;
     
     /**
-     * Gets the incoming neighbour vertices of the given vertex (vertices from which the given one is reachable).
+     * Gets the incoming neighbor vertices of the given vertex (vertices from which the given one is reachable).
      * 
      * @param VertexInterface $vertex The vertex.
-     * @return \Traversable A traversable collection of vertices of type {@link VertexInterface}.
-     *                                   An empty collection in case the vertex doesn't have incoming neighbours.
+     * @return \Iterator A traversable collection of vertices of type {@link VertexInterface}.
+     *                                   An empty collection in case the vertex doesn't have incoming neighbors.
      * @throws UnknownVertexException If the given vertex is unknown.
      */
-    public function getVertexIncomingEdgeNeighbours(VertexInterface $vertex);
+    public function getVertexIncomingEdgeNeighbors(VertexInterface $vertex);
     
     /**
-     * Gets the outgoing neighbour vertices of the given vertex (vertices which are reachable from the given one).
+     * Gets the outgoing neighbor vertices of the given vertex (vertices which are reachable from the given one).
      * 
      * @param VertexInterface $vertex The vertex.
-     * @return \Traversable A traversable collection of vertices of type {@link VertexInterface}.
-     *                                   An empty collection in case the vertex doesn't have incoming neighbours.
+     * @return \Iterator A traversable collection of vertices of type {@link VertexInterface}.
+     *                                   An empty collection in case the vertex doesn't have incoming neighbors.
      * @throws UnknownVertexException If the given vertex is unknown.
      */
-    public function getVertexOutgoingEdgeNeighbours(VertexInterface $vertex);
+    public function getVertexOutgoingEdgeNeighbors(VertexInterface $vertex);
     
     /**
-     * Gets the number of incoming neighbour vertices of the given vertex.
+     * Gets the number of incoming neighbor vertices of the given vertex.
      * 
      * @param VertexInterface $vertex The vertex.
      * @return int The indegree.
@@ -75,7 +75,7 @@ interface DirectedGraphInterface extends GraphInterface {
     public function getVertexIndegree(VertexInterface $vertex): int;
     
     /**
-     * Gets the number of outgoing neighbour vertices of the given vertex.
+     * Gets the number of outgoing neighbor vertices of the given vertex.
      * 
      * @param VertexInterface $vertex The vertex.
      * @return int The outdegree.
@@ -109,19 +109,19 @@ interface DirectedGraphInterface extends GraphInterface {
      * Gets all the incoming edges which have the given vertex as an incoming endpoint.
      * 
      * @param VertexInterface $vertex The vertex.
-     * @return \Traversable A traversable collection of {@link EdgeInterface}. An empty collection if there are no incoming edges which link to the given vertex.
+     * @return \Iterator A traversable collection of {@link EdgeInterface}. An empty collection if there are no incoming edges which link to the given vertex.
      * @throws UnknownVertexException If the given vertex is unknown.
      */
-    public function getVertexIncomingEdges(VertexInterface $vertex): \Traversable;
+    public function getVertexIncomingEdges(VertexInterface $vertex): \Iterator;
     
     /**
      * Gets all the outgoing edges which have the given vertex as an outgoing endpoint.
      * 
      * @param VertexInterface $vertex The vertex.
-     * @return \Traversable A traversable collection of {@link EdgeInterface}. An empty collection if there are no outgoing edges for the given vertex.
+     * @return \Iterator A traversable collection of {@link EdgeInterface}. An empty collection if there are no outgoing edges for the given vertex.
      * @throws UnknownVertexException If the given vertex is unknown.
      */
-    public function getVertexOutgoingEdges(VertexInterface $vertex): \Traversable;
+    public function getVertexOutgoingEdges(VertexInterface $vertex): \Iterator;
     
     /**
      * Gets all the incoming edges which have the given vertices as endpoints, i.e. all edges
@@ -129,20 +129,40 @@ interface DirectedGraphInterface extends GraphInterface {
      * 
      * @param VertexInterface $vertex1 The first vertex.
      * @param VertexInterface $vertex2 The second vertex.
-     * @return \Traversable A traversable collection of {@link EdgeInterface}. An empty collection if there are no incoming edges which link the two vertices.
+     * @return \Iterator A traversable collection of {@link EdgeInterface}. An empty collection if there are no incoming edges which link the two vertices.
      * @throws UnknownVertexException If one of the given vertices is unknown.
      */
-    public function getVerticesIncomingEdges(VertexInterface $vertex1, VertexInterface $vertex2): \Traversable;
+    public function getVerticesIncomingEdges(VertexInterface $vertex1, VertexInterface $vertex2): \Iterator;
     
     /**
      * Gets all the outgoing edges which have the given vertices as endpoints, i.e. all edges
      * with a direction such as the second vertex is reached from the first vertex.
      * 
-     * @param VertexInterface $vertex1 The first vertex.
-     * @param VertexInterface $vertex2 The second vertex.
-     * @return \Traversable A traversable collection of {@link EdgeInterface}. An empty collection if there are no outgoing edges which link the two vertices.
+     * @param VertexInterface $vertex1 The source vertex.
+     * @param VertexInterface $vertex2 The target vertex.
+     * @return \Iterator A traversable collection of {@link EdgeInterface}. An empty collection if there are no outgoing edges which link the two vertices.
      * @throws UnknownVertexException If one of the given vertices is unknown.
      */
-    public function getVerticesOutgoingEdges(VertexInterface $vertex1, VertexInterface $vertex2): \Traversable;
+    public function getVerticesOutgoingEdges(VertexInterface $vertex1, VertexInterface $vertex2): \Iterator;
+    
+    /**
+     * Gets the indegree sequence of the directed graph.
+     * The indegree sequence is a sequence obtained by ordering the indegrees of all vertices of the graph in increasing order.
+     * 
+     * @see http://mathonline.wikidot.com/out-degree-sequence-and-in-degree-sequence
+     * 
+     * @return \Iterator The indegree sequence. Each element is an int, representing the degree of a vertex.
+     */
+    public function getIndegreeSequence(): \Iterator;
+    
+    /**
+     * Gets the outdegree sequence of the directed graph.
+     * The outdegree sequence is a sequence obtained by ordering the outdegrees of all vertices of the graph in increasing order.
+     * 
+     * @see http://mathonline.wikidot.com/out-degree-sequence-and-in-degree-sequence
+     * 
+     * @return \Iterator The outdegree sequence. Each element is an int, representing the degree of a vertex.
+     */
+    public function getOutdegreeSequence(): \Iterator;
     
 }

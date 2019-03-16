@@ -25,37 +25,22 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Norma\Algorithm\Sorting;
+namespace Norma\Data\Structure\Graph;
 
 /**
- * Builtin quicksort algorithm for sorting arrays using builtin PHP functions.
+ * A trait for a Norma builtin graph data structure.
  *
  * @author Anton Bagdatyev (Tonix-Tuft) <antonytuft@gmail.com>
  */
-class BuiltinQuicksort extends AbstractSortingAlgorithm {
-
-    /**
-     * {@inheritdoc}
-     */
-    public function sort(array &$array, $comparator = NULL) {
-        $comparatorFn = $this->comparator($comparator);
-        usort($array, $comparatorFn);
-    }
+trait GraphTrait {
     
     /**
-     * {@inheritdoc}
+     * Creates a new empty graph.
+     * 
+     * @return GraphInterface A new empty graph. The graph MUST be empty, i.e. without vertices nor edges.
      */
-    public function asort(array &$array, $comparator = NULL) {
-        $comparatorFn = $this->comparator($comparator);
-        uasort($array, $comparatorFn);
+    protected function newEmptyGraph() {
+        return new static();
     }
     
-    /**
-     * {@inheritdoc}
-     */
-    public function ksort(array &$array, $comparator = NULL) {
-        $comparatorFn = $this->comparator($comparator);
-        uksort($array, $comparatorFn);
-    }
-
 }
