@@ -69,6 +69,11 @@ abstract class AbstractPriorityQueue implements PriorityQueueInterface {
     protected $count;
     
     /**
+     * @var int
+     */
+    protected $i;
+    
+    /**
      * Constructs a new priority queue.
      */
     public function __construct() {
@@ -77,6 +82,7 @@ abstract class AbstractPriorityQueue implements PriorityQueueInterface {
         $this->extractFlags = PriorityQueueInterface::EXTRACT_FLAG_DATA;
         $this->iterationMode = PriorityQueueInterface::ITERATION_MODE_DELETE;
         $this->count = 0;
+        $this->i = 0;
     }
     
     /**
@@ -103,6 +109,7 @@ abstract class AbstractPriorityQueue implements PriorityQueueInterface {
             return $item['priority'];
         }
         else {
+            unset($item['i']);
             return $item;
         }
     }
@@ -176,12 +183,17 @@ abstract class AbstractPriorityQueue implements PriorityQueueInterface {
     public function insert($value, $priority): bool {
         $this->items[] = [
             'data' => $value,
-            'priority' => $priority
+            'priority' => $priority,
+            'i' => ++$this->i
         ];
         $this->count++;
         
         $this->sortingAlgorithm->sort($this->items, function($a, $b) {
-            return $this->compare($b['priority'], $a['priority']);
+            $priorityComparation = $this->compare($b['priority'], $a['priority']);
+            if ($priorityComparation === 0) {
+                return $a['i'] <=> $b['i'];
+            }
+            return $priorityComparation;
         });
         
         return TRUE;
