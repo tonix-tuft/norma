@@ -128,7 +128,7 @@ interface GraphInterface {
      * 
      * @param VertexInterface $vertex
      * @return \Iterator A traversable collection of vertices of type {@link VertexInterface}.
-     *                                   An empty collection in case the vertex doesn't have neighbors.
+     *                             An empty collection in case the vertex doesn't have neighbors.
      * @throws UnknownVertexException If the given vertex is unknown.
      */
     public function getVertexNeighbors(VertexInterface $vertex): \Iterator;

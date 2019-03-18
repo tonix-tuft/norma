@@ -39,6 +39,28 @@ use Norma\Data\Structure\Graph\UnknownVertexException;
 interface DirectedGraphInterface extends GraphInterface {
     
     /**
+     * Tests whether two vertices are incoming adjacent or not, i.e. if the first vertex
+     * can be reached from the second vertex.
+     * 
+     * @param VertexInterface $vertex1 First vertex.
+     * @param VertexInterface $vertex2 Second vertex.
+     * @return bool TRUE if they are incoming adjacent, FALSE otherwise.
+     * @throws UnknownVertexException If one of the given vertices is unknown.
+     */
+    public function areIncomingAdjacent(VertexInterface $vertex1, VertexInterface $vertex2): bool;
+    
+    /**
+     * Tests whether two vertices are outgoing adjacent or not, i.e. if the second vertex
+     * can be reached from the first vertex.
+     * 
+     * @param VertexInterface $vertex1 First vertex.
+     * @param VertexInterface $vertex2 Second vertex.
+     * @return bool TRUE if they are incoming adjacent, FALSE otherwise.
+     * @throws UnknownVertexException If one of the given vertices is unknown.
+     */
+    public function areOutgoingAdjacent(VertexInterface $vertex1, VertexInterface $vertex2): bool;
+    
+    /**
      * Gets the transpose graph of this directed graph.
      * 
      * @return DirectedGraphInterface The transpose graph.
@@ -50,7 +72,7 @@ interface DirectedGraphInterface extends GraphInterface {
      * 
      * @param VertexInterface $vertex The vertex.
      * @return \Iterator A traversable collection of vertices of type {@link VertexInterface}.
-     *                                   An empty collection in case the vertex doesn't have incoming neighbors.
+     *                             An empty collection in case the vertex doesn't have incoming neighbors.
      * @throws UnknownVertexException If the given vertex is unknown.
      */
     public function getVertexIncomingEdgeNeighbors(VertexInterface $vertex);
@@ -60,7 +82,7 @@ interface DirectedGraphInterface extends GraphInterface {
      * 
      * @param VertexInterface $vertex The vertex.
      * @return \Iterator A traversable collection of vertices of type {@link VertexInterface}.
-     *                                   An empty collection in case the vertex doesn't have incoming neighbors.
+     *                             An empty collection in case the vertex doesn't have incoming neighbors.
      * @throws UnknownVertexException If the given vertex is unknown.
      */
     public function getVertexOutgoingEdgeNeighbors(VertexInterface $vertex);
@@ -82,28 +104,6 @@ interface DirectedGraphInterface extends GraphInterface {
      * @throws UnknownVertexException If the given vertex is unknown.
      */
     public function getVertexOutdegree(VertexInterface $vertex): int;
-    
-    /**
-     * Tests whether two vertices are incoming adjacent or not, i.e. if the first vertex
-     * can be reached from the second vertex.
-     * 
-     * @param VertexInterface $vertex1 First vertex.
-     * @param VertexInterface $vertex2 Second vertex.
-     * @return bool TRUE if they are incoming adjacent, FALSE otherwise.
-     * @throws UnknownVertexException If one of the given vertices is unknown.
-     */
-    public function areIncomingAdjacent(VertexInterface $vertex1, VertexInterface $vertex2): bool;
-    
-    /**
-     * Tests whether two vertices are outgoing adjacent or not, i.e. if the second vertex
-     * can be reached from the first vertex.
-     * 
-     * @param VertexInterface $vertex1 First vertex.
-     * @param VertexInterface $vertex2 Second vertex.
-     * @return bool TRUE if they are incoming adjacent, FALSE otherwise.
-     * @throws UnknownVertexException If one of the given vertices is unknown.
-     */
-    public function areOutgoingAdjacent(VertexInterface $vertex1, VertexInterface $vertex2): bool;
     
     /**
      * Gets all the incoming edges which have the given vertex as an incoming endpoint.
@@ -164,5 +164,37 @@ interface DirectedGraphInterface extends GraphInterface {
      * @return \Iterator The outdegree sequence. Each element is an int, representing the degree of a vertex.
      */
     public function getOutdegreeSequence(): \Iterator;
+    
+    /**
+     * Gets the maximum indegree of the graph considering all its vertices.
+     * The maximum indegree is the indegree of the vertex with the highest indegree considering all the others.
+     * 
+     * @return int The maximum indegree of the graph. -1 MUST be returned if the graph is empty (does not have vertices yet).
+     */
+    public function getMaximumIndegree(): int;
+    
+    /**
+     * Gest the minimum indegree of the graph considering all its vertices.
+     * The minimum indegree is the indegree of the vertex with the lowest indegree considering all the others.
+     * 
+     * @return int The minimum indegree of the graph. -1 MUST be returned if the graph is empty (does not have vertices yet).
+     */
+    public function getMinimumIndegree(): int;
+    
+    /**
+     * Gets the maximum outdegree of the graph considering all its vertices.
+     * The maximum outdegree is the outdegree of the vertex with the highest outdegree considering all the others.
+     * 
+     * @return int The maximum outdegree of the graph. -1 MUST be returned if the graph is empty (does not have vertices yet).
+     */
+    public function getMaximumOutdegree(): int;
+    
+    /**
+     * Gest the minimum outdegree of the graph considering all its vertices.
+     * The minimum outdegree is the degree of the vertex with the lowest outdegree considering all the others.
+     * 
+     * @return int The minimum outdegree of the graph. -1 MUST be returned if the graph is empty (does not have vertices yet).
+     */
+    public function getMinimumOutdegree(): int;
     
 }

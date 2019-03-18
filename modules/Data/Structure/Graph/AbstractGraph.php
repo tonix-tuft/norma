@@ -138,6 +138,18 @@ abstract class AbstractGraph implements GraphInterface {
     abstract protected function addCollapsedEdgeToSkeleton(GraphInterface $skeleton, VertexInterface $vertex1, VertexInterface $vertex2, $skeletonKeepEdgeMode = GraphInterface::SKELETON_MODE_KEEP_MAX_EDGE, $edgeWeightToIntegerCallback = NULL);
     
     /**
+     * Tests whether a pair of vertices has multiple edges which don't make the graph complete.
+     * 
+     * @param \Norma\Data\Structure\Graph\VertexInterface $vertex The first vertex of the pair.
+     * @param \Norma\Data\Structure\Graph\VertexInterface $otherVertex The second vertex of the pair.
+     * @return bool Implementors MUST return TRUE if the pair of vertices has multiple edges or if the graph
+     *                      pair is not connected by an edge taking into account whether the graph is directed or not,
+     *                      or return FALSE otherwise.
+     *                      Loops are not considered multiple edges and this method SHOULD NOT check for loops.
+     */
+    abstract protected function verticesPairDoesNotMakeGraphComplete(VertexInterface $vertex, VertexInterface $otherVertex): bool;
+    
+    /**
      * Factory method which creates a new sorting algorithm to be used internally
      * by the graph data structure.
      * 
@@ -224,9 +236,20 @@ abstract class AbstractGraph implements GraphInterface {
      * @return void
      */
     protected function decrementVertexDegreeCount($vertexDegree) {
-        $this->degreeMap[$vertexDegree]--;
-        if ($this->degreeMap[$vertexDegree] <= 0) {
-            unset($this->degreeMap[$vertexDegree]);
+        $this->decrementVertexDegreeCountOfMap($this->degreeMap, $vertexDegree);
+    }
+    
+    /**
+     * Decrements a vertex degree count, given an internal degree map.
+     * 
+     * @param array $map The internal degree map.
+     * @param int $vertexDegree The vertex degree count to decrement.
+     * @return void
+     */
+    protected function decrementVertexDegreeCountOfMap(&$map, $vertexDegree) {
+        $map[$vertexDegree]--;
+        if ($map[$vertexDegree] <= 0) {
+            unset($map[$vertexDegree]);
         }
     }
     
@@ -237,21 +260,32 @@ abstract class AbstractGraph implements GraphInterface {
      * @return void
      */
     protected function incrementVertexDegreeCount($vertexDegree) {
+        $this->incrementVertexDegreeCountOfMap($this->degreeMap, $vertexDegree);
+    }
+    
+    /**
+     * Increments a vertex degree count of a degree map and sorts the degree map if needed.
+     * 
+     * @param array $map The degree map.
+     * @param int $vertexDegree The vertex outdegree.
+     * @return void
+     */
+    protected function incrementVertexDegreeCountOfMap(&$map, $vertexDegree) {
         $sort = FALSE;
-        if (!isset($this->degreeMap[$vertexDegree])) {
+        if (!isset($map[$vertexDegree])) {
             // There wasn't a vertex with this degree yet.
-            $this->degreeMap[$vertexDegree] = 0;
+            $map[$vertexDegree] = 0;
             
             // If the vertex degree is greater than 0, the degree map must be resorted.
             $sort = $vertexDegree > 0;
         }
-        $this->degreeMap[$vertexDegree]++;
+        $map[$vertexDegree]++;
         
         if ($sort) {
-            $this->sortingAlgorithm->ksort($this->degreeMap, function($degree1, $degree2) {
+            $this->sortingAlgorithm->ksort($map, function($degree1, $degree2) {
                 // Highest degree comes first.
                 return $degree2 <=> $degree1;
-            });   
+            });
         }
     }
     
@@ -370,6 +404,50 @@ abstract class AbstractGraph implements GraphInterface {
     }
     
     /**
+     * Removes the associations between neighbor vertices, if it exists.
+     * 
+     * @param VertexInterface $sourceVertex Source vertex.
+     * @param VertexInterface $targetVertex Target vertex.
+     * @return void
+     */
+    protected function removeNeighborsAssociation(VertexInterface $sourceVertex, VertexInterface $targetVertex) {
+        if (isset($this->neighborsMap[$sourceVertex][$targetVertex])) {
+            unset($this->neighborsMap[$sourceVertex][$targetVertex]);
+        }
+    }
+    
+    /**
+     * Gets the maximum degree of a degree map.
+     * 
+     * @param array $map The degree map.
+     * @return int The maximum degree of the map or -1 if the map is empty.
+     */
+    protected function getMaxFromDegreeMap(&$map) {
+        if (empty($map)) {
+            return -1;
+        }
+        reset($map);
+        $degree = key($map);
+        return $degree;
+    }
+    
+    /**
+     * Gets the minimum degree of a degree map.
+     * 
+     * @param array $map The degree map.
+     * @return int The minimum degree of the map or -1 if the map is empty.
+     */
+    protected function getMinFromDegreeMap(&$map) {
+        if (empty($map)) {
+            return -1;
+        }
+        end($map);
+        $degree = key($map);
+        reset($map);
+        return $degree;
+    }
+    
+    /**
      * {@inheritdoc}
      */
     public function getOrder(): int {
@@ -387,25 +465,14 @@ abstract class AbstractGraph implements GraphInterface {
      * {@inheritdoc}
      */
     public function getMaximumDegree(): int {
-        if (empty($this->degreeMap)) {
-            return -1;
-        }
-        reset($this->degreeMap);
-        $degree = key($this->degreeMap);
-        return $degree;
+        return $this->getMaxFromDegreeMap($this->degreeMap);
     }
     
     /**
      * {@inheritdoc}
      */
     public function getMinimumDegree(): int {
-        if (empty($this->degreeMap)) {
-            return -1;
-        }
-        end($this->degreeMap);
-        $degree = key($this->degreeMap);
-        reset($this->degreeMap);
-        return $degree;
+        return $this->getMinFromDegreeMap($this->degreeMap);
     }
     
     /**
@@ -413,7 +480,6 @@ abstract class AbstractGraph implements GraphInterface {
      */
     public function getVertexDegree(VertexInterface $vertex): int {
         $this->throwExceptionIfVertexDoesNotExist($vertex);
-        
         return $this->verticesDegreeMap[$vertex];
     }
     
@@ -507,8 +573,8 @@ abstract class AbstractGraph implements GraphInterface {
         
         unset($this->adjacencyMap[$vertex]);
         unset($this->verticesMap[$vertex]);
-        unset($this->verticesDegreeMap[$vertex]);
         unset($this->neighborsMap[$vertex]);
+        unset($this->verticesDegreeMap[$vertex]);
         
         return $this;
     }
@@ -562,18 +628,16 @@ abstract class AbstractGraph implements GraphInterface {
         unset($this->adjacencyMap[$sourceVertex][$targetVertex][$edge]);
         if ($this->adjacencyMap[$sourceVertex][$targetVertex]->count() <= 0) {
             unset($this->adjacencyMap[$sourceVertex][$targetVertex]);
+            
+            // Remove neighbors association.
+            $this->removeNeighborsAssociation($sourceVertex, $targetVertex);
         }
         
-        // Remove neighbors associations.
-        if (isset($this->neighborsMap[$sourceVertex][$targetVertex])) {
-            unset($this->neighborsMap[$sourceVertex][$targetVertex]);
-        }
-        if (isset($this->neighborsMap[$targetVertex][$sourceVertex])) {
-            unset($this->neighborsMap[$targetVertex][$sourceVertex]);
-        }
-        
+        // Update vertices degrees.
         $this->decrementNewVertexDegree($sourceVertex);
         $this->decrementNewVertexDegree($targetVertex);
+        
+        return $this;
     }
     
     /**
@@ -650,6 +714,38 @@ abstract class AbstractGraph implements GraphInterface {
     /**
      * {@inheritdoc}
      */
+    public function isComplete(): bool {
+        if ($this->neighborsMap->count() <= 0) {
+            return FALSE;
+        }
+        $vertices = [];
+        $i = 0;
+        foreach ($this->verticesMap as $vertex) {
+            if (isset($this->adjacencyMap[$vertex][$vertex])) {
+                // A complete graph is simple and therefore does not allow loops.
+                return FALSE;
+            }
+            
+            $vertices[] = $vertex;
+            
+            $k = $i - 1;
+            while ($k >= 0) {
+                $otherVertex = $vertices[$k];
+                
+                if ($this->verticesPairDoesNotMakeGraphComplete($vertex, $otherVertex)) {
+                    return FALSE;
+                }
+                
+                $k--;
+            }
+            $i++;
+        }
+        return TRUE;
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
     public function getSkeleton($skeletonKeepEdgeMode = GraphInterface::SKELETON_MODE_KEEP_MAX_EDGE, $edgeWeightToIntegerCallback = NULL): GraphInterface {
         $skeleton = $this->newEmptyGraph();
         $allVertices = $this->verticesMap;
@@ -679,6 +775,7 @@ abstract class AbstractGraph implements GraphInterface {
                 yield $degree;
             }
         }
+        yield from [];
     }
     
 }

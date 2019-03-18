@@ -61,52 +61,6 @@ class UndirectedGraph extends AbstractGraph {
     /**
      * {@inheritdoc}
      */
-    public function isComplete(): bool {
-        if ($this->neighborsMap->count() <= 0) {
-            return FALSE;
-        }
-        $vertices = [];
-        $i = 0;
-        foreach ($this->verticesMap as $vertex) {
-            if (isset($this->adjacencyMap[$vertex][$vertex])) {
-                // A complete graph is simple and therefore does not allow loops.
-                return FALSE;
-            }
-            
-            $vertices[] = $vertex;
-            
-            $k = $i - 1;
-            while ($k >= 0) {
-                $otherVertex = $vertices[$k];
-                // All vertices must be adjacent, multi-archs are not allowed.
-                if (
-                    !(
-                        !isset($this->adjacencyMap[$vertex][$otherVertex])
-                        XOR
-                        !isset($this->adjacencyMap[$otherVertex][$vertex])
-                    )
-                ) {
-                    return FALSE;
-                }
-                
-                if (
-                    $this->adjacencyMap[$vertex][$otherVertex]->count() > 1
-                    ||
-                    $this->adjacencyMap[$otherVertex][$vertex]->count() > 1
-                ) {
-                    return FALSE;
-                }
-                
-                $k--;
-            }
-            $i++;
-        }
-        return TRUE;
-    }
-    
-    /**
-     * {@inheritdoc}
-     */
     protected function addCollapsedEdgeToSkeleton(GraphInterface $skeleton, VertexInterface $vertex1, VertexInterface $vertex2, $skeletonKeepEdgeMode = GraphInterface::SKELETON_MODE_KEEP_MAX_EDGE, $edgeWeightToIntegerCallback = NULL) {
         $edgesToKeep = [];
         
@@ -157,6 +111,32 @@ class UndirectedGraph extends AbstractGraph {
             list($edge,, $sourceVertex, $targetVertex) = $edgeToKeep;
             $skeleton->addEdge($sourceVertex, $edge, $targetVertex);
         }
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
+    protected function verticesPairDoesNotMakeGraphComplete(VertexInterface $vertex, VertexInterface $otherVertex): bool {
+        // All vertices must be adjacent, multi-archs are not allowed.
+        if (
+            !(
+                !isset($this->adjacencyMap[$vertex][$otherVertex])
+                XOR
+                !isset($this->adjacencyMap[$otherVertex][$vertex])
+            )
+        ) {
+            return TRUE;
+        }
+        
+        if (
+            $this->adjacencyMap[$vertex][$otherVertex]->count() > 1
+            ||
+            $this->adjacencyMap[$otherVertex][$vertex]->count() > 1
+        ) {
+            return TRUE;
+        }
+        
+        return FALSE;
     }
     
 }
