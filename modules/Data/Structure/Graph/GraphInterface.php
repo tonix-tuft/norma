@@ -155,6 +155,15 @@ interface GraphInterface {
     public function addVertex(VertexInterface $vertex);
     
     /**
+     * Creates a vertex using a default implementation and adds it to the graph.
+     * Implementors MUST add the newly created vertex to the graph before returning it to the caller.
+     * 
+     * @param mixed $vertexValue The value of the vertex or NULL in case the vertex does not have a value.
+     * @return VertexInterface The newly created vertex.
+     */
+    public function createVertex($vertexValue = NULL): VertexInterface;
+    
+    /**
      * Removes a vertex from the graph.
      * 
      * @param VertexInterface $vertex The vertex to remove.
@@ -182,6 +191,17 @@ interface GraphInterface {
      * @throws EdgeAlreadyExistsException If the edge already exists in the graph.
      */
     public function addEdge(VertexInterface $vertex1, EdgeInterface $edge, VertexInterface $vertex2);
+    
+    /**
+     * Creates an edge using a default implementation connecting the two vertices given as parameters and adds it to the graph.
+     * Implementors MUST add the newly created edge to the graph before returning it to the caller.
+     * 
+     * @param VertexInterface $vertex1 Source vertex.
+     * @param VertexInterface $vertex2 Target vertex.
+     * @param mixed $edgeWeight The weight of the edge or NULL in case the edge does not have a weight.
+     * @return EdgeInterface The newly created edge.
+     */
+    public function createEdge(VertexInterface $vertex1, VertexInterface $vertex2, $edgeWeight = NULL): EdgeInterface;
     
     /**
      * Removes an edge.

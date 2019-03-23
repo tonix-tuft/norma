@@ -38,6 +38,8 @@ use Norma\Data\Structure\Graph\UnknownEdgeException;
 use Norma\Algorithm\Sorting\SortingAlgorithmInterface;
 use Norma\Algorithm\Sorting\BuiltinQuicksort;
 use Norma\Data\Structure\Graph\VertexInterface;
+use Norma\Data\Structure\Graph\Vertex;
+use Norma\Data\Structure\Graph\Edge;
 
 /**
  * An abstract graph base class which internally uses map data structures
@@ -448,6 +450,30 @@ abstract class AbstractGraph implements GraphInterface {
     }
     
     /**
+     * Internal factory method for creating a new vertex.
+     * 
+     * @param mixed $vertexValue The value of the vertex.
+     * @return VertexInterface The vertex.
+     */
+    protected function makeNewVertex($vertexValue): VertexInterface {
+        $vertex = new Vertex();
+        $vertex->setValue($vertexValue);
+        return $vertex;
+    }
+    
+    /**
+     * Internal factory method for creating a new edge.
+     * 
+     * @param mixed $edgeWeight The weight of the edge.
+     * @return EdgeInterface The edge.
+     */
+    protected function makeNewEdge($edgeWeight): EdgeInterface {
+        $edge = new Edge();
+        $edge->setWeight($edgeWeight);
+        return $edge;
+    }
+    
+    /**
      * {@inheritdoc}
      */
     public function getOrder(): int {
@@ -551,6 +577,15 @@ abstract class AbstractGraph implements GraphInterface {
     /**
      * {@inheritdoc}
      */
+    public function createVertex($vertexValue = NULL): VertexInterface {
+        $vertex = $this->makeNewVertex($vertexValue);
+        $this->addVertex($vertex);
+        return $vertex;
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
     public function removeVertex(VertexInterface $vertex) {
         $this->throwExceptionIfVertexDoesNotExist($vertex);
         
@@ -610,6 +645,15 @@ abstract class AbstractGraph implements GraphInterface {
         $this->incrementNewVertexDegree($vertex2);
         
         return $this;
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function createEdge(VertexInterface $vertex1, VertexInterface $vertex2, $edgeWeight = NULL): EdgeInterface {
+        $edge = $this->makeNewEdge($edgeWeight);
+        $this->addEdge($vertex1, $edge, $vertex2);
+        return $edge;
     }
     
     /**
