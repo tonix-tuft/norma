@@ -39,7 +39,7 @@ trait GraphTrait {
      * 
      * @return GraphInterface A new empty graph. The graph MUST be empty, i.e. without vertices nor edges.
      */
-    protected function newEmptyGraph() {
+    protected function newEmptyGraph(): GraphInterface {
         return new static();
     }
     

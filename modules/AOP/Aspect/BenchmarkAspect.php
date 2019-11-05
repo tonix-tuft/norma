@@ -41,22 +41,22 @@ class BenchmarkAspect implements AspectInterface {
      * 
      * 1) Pointcut1: Method execution (comprises constructor if the string `__construct` matches the pattern and there's a `__construct` method defined):
      * 
-     *      {MemberAccessModifiers NamespacePattern[::|->]NamePattern()}
+     *      {MemberAccessModifiers NamespacePattern[`::`|`->`]NamePattern()}
      * 
-     *          - MemberAccessModifiers = [public|protected|private|*]
-     *          - NamespacePattern = [NamespaceIdentifierPattern|NamespaceIdentifierPattern+] (for `+`, see: https://stackoverflow.com/questions/29397872/difference-between-and-when-matching-a-class-in-aspectj)
-     *          - NamespaceIdentifierPattern = [GlobalNamespaceClassName|\GlobalNamespaceClassName|NamespaceName\ClassName|*|**]
-     *          - NamePattern = [`^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$`|*]
+     *          - MemberAccessModifiers = [`public`|`protected`|`private`|`*`]
+     *          - NamespacePattern = [`NamespaceIdentifierPattern`|`NamespaceIdentifierPattern+`] (for `+`, see: https://stackoverflow.com/questions/29397872/difference-between-and-when-matching-a-class-in-aspectj)
+     *          - NamespaceIdentifierPattern = [`GlobalNamespaceClassName`|`\GlobalNamespaceClassName`|`NamespaceName\ClassName`|`*`|`**`]
+     *          - NamePattern = [`^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$`|`*`]
      * 
      * 2) Pointcut2: Property access (read/write):
      *      
-     *      {AccessOperation MemberAccessModifiers NamespacePattern[::|->]NamePattern}
+     *      {AccessOperation MemberAccessModifiers NamespacePattern[`::`|`->`]NamePattern}
      *          
-     *          - AccessOperation = [read|write|*]
+     *          - AccessOperation = [`read`|`write`|`*`]
      *  
      * 3) Pointcut3: Annotated method execution or property access:
      *      
-     *      {[Method|Property AccessOperation] @NamespaceIdentifierPattern}
+     *      {[`Method`|`Property AccessOperation`] @NamespaceIdentifierPattern}
      * 
      *          - Method = method
      *          - Property = property
@@ -76,7 +76,7 @@ class BenchmarkAspect implements AspectInterface {
      *      Pointcut || Pointcut
      *      (Pointcut && (Pointcut || Pointcut)) || (Pointcut && Pointcut) || Pointcut
      * 
-     *          - Pointcut = [Pointcut1|Pointcut2|Pointcut3|Pointcut4|Pointcut5]
+     *          - Pointcut = [`Pointcut1`|`Pointcut2`|`Pointcut3`|`Pointcut4`|`Pointcut5`]
      *
      * A simple pointcut definition (`Pointcut1`, `Pointcut2`, `Pointcut3`, `Pointcut4`, `Pointcut5`) MUST be encapsulated into curly braces (`{}`),
      * otherwise the AOP pointcut parser component will throw an exception. This is done to force using curly braces with simple poincut definitions
@@ -107,7 +107,7 @@ class BenchmarkAspect implements AspectInterface {
      * return '{static Some*\NamespaceName\**Test+}'; // 5) Static initialization (class loaded into memory by PHP for the first time, similar to the static block construct of Java).
      */
     public function pointcut pointcutName1() {
-        return '{public TestClass->*()}';
+        return '{* *+->*s()}';
     }
     
     /**

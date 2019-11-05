@@ -25,17 +25,22 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Norma\AOP\Pointcut;
+namespace Norma\Data\Structure\Tree\Trie;
 
-use Norma\AOP\Pointcut\AbstractAnnotatedPointcut;
+use Norma\Data\Structure\Tree\Trie\TrieInterface;
 
 /**
- * Annotated method execution pointcut.
+ * The interface of a trie factory.
  *
  * @author Anton Bagdatyev (Tonix-Tuft) <antonytuft@gmail.com>
  */
-class AnnotatedMethodExecutionPointcut extends AbstractAnnotatedPointcut {
+interface TrieFactoryInterface {
     
-    // TODO
+    /**
+     * Makes a new trie tree.
+     * 
+     * @return TrieInterface The trie.
+     */
+    public function make(): TrieInterface;
     
 }

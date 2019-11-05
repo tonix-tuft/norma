@@ -27,6 +27,8 @@
 
 namespace Norma\AOP\Pointcut;
 
+use Norma\AOP\Pointcut\AbstractAnnotatedPointcut;
+
 /**
  * Annotated property access pointcut.
  *

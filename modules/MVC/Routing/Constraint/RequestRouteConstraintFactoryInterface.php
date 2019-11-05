@@ -27,6 +27,8 @@
 
 namespace Norma\MVC\Routing\Constraint;
 
+use Norma\MVC\Routing\Constraint\RequestRouteConstraintInterface;
+
 /**
  * The interface of a request route constraint factory.
  *
@@ -39,8 +41,8 @@ interface RequestRouteConstraintFactoryInterface {
      * 
      * @param string $constraintName The name of the constraint.
      * @param mixed The data of the constraint which define it.
-     * @return RequestRouteConstraint The constraint .
+     * @return RequestRouteConstraintInterface The constraint.
      */
-    public function makeConstraint($constraintName, $constraintData);
+    public function makeConstraint($constraintName, $constraintData): RequestRouteConstraintInterface;
     
 }

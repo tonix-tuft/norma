@@ -25,17 +25,14 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Norma\AOP\Pointcut;
+namespace Norma\Algorithm\Parsing;
 
-use Norma\AOP\Pointcut\AbstractAnnotatedPointcut;
+use Norma\Core\Oops\AbstractException;
 
 /**
- * Annotated method execution pointcut.
+ * An exception to throw whenever there is an error during the execution of a parsing algorithm.
+ * This exception MAY be used as a base class for more specific parsing exceptions.
  *
  * @author Anton Bagdatyev (Tonix-Tuft) <antonytuft@gmail.com>
  */
-class AnnotatedMethodExecutionPointcut extends AbstractAnnotatedPointcut {
-    
-    // TODO
-    
-}
+class ParsingException extends AbstractException {}

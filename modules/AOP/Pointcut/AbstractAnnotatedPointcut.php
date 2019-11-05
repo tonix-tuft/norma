@@ -27,14 +27,12 @@
 
 namespace Norma\AOP\Pointcut;
 
-use Norma\AOP\Pointcut\AbstractAnnotatedPointcut;
-
 /**
- * Annotated method execution pointcut.
+ * Annotated pointcut.
  *
  * @author Anton Bagdatyev (Tonix-Tuft) <antonytuft@gmail.com>
  */
-class AnnotatedMethodExecutionPointcut extends AbstractAnnotatedPointcut {
+abstract class AbstractAnnotatedPointcut {
     
     // TODO
     

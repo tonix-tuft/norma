@@ -25,16 +25,14 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Norma\AOP\Pointcut;
-
-use Norma\AOP\Pointcut\AbstractAnnotatedPointcut;
+namespace Norma\Algorithm\Parsing;
 
 /**
- * Annotated method execution pointcut.
+ * Abstract Syntax Tree (AST) interface.
  *
  * @author Anton Bagdatyev (Tonix-Tuft) <antonytuft@gmail.com>
  */
-class AnnotatedMethodExecutionPointcut extends AbstractAnnotatedPointcut {
+interface ASTInterface {
     
     // TODO
     

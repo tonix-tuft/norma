@@ -123,7 +123,7 @@ class FrameworkUtils {
     }
     
     /**
-     * Checks whether all the keys given as parameter exist in an array. Each subsequent key is checked on an
+     * Checks whether all the keys given as parameter exist in an array. Each subsequent key is checked in an
      * inner dimension of the given array.
      * 
      * @param array $array An array

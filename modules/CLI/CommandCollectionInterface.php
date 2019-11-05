@@ -28,7 +28,7 @@
 namespace Norma\CLI;
 
 use Norma\CLI\CommandAlreadyExistsException;
-use Norma\CLI\CommandDoesNotExistsException;
+use Norma\CLI\CommandDoesNotExistException;
 
 /**
  * The interface of a Norma CLI application's command collection.
@@ -62,7 +62,7 @@ interface CommandCollectionInterface {
      * @param string $commandName The command name.
      * @return array|null An array representing the command within the collection matching the command name
      *                              or NULL if there isn't a command with the given command name.
-     * @throws CommandDoesNotExistsException If there isn't a command with the given name within the collection.
+     * @throws CommandDoesNotExistException If there isn't a command with the given name within the collection.
      */
     public function getCommand($commandName);
     

@@ -29,7 +29,7 @@ namespace Norma\CLI;
 
 use Norma\CLI\CommandCollectionInterface;
 use Norma\CLI\CommandAlreadyExistsException;
-use Norma\CLI\CommandDoesNotExistsException;
+use Norma\CLI\CommandDoesNotExistException;
 
 /**
  * The implementation of a command collection.
@@ -71,7 +71,7 @@ class CommandCollection implements CommandCollectionInterface {
      */
     public function getCommand($commandName) {
         if (!isset($this->commands[$commandName])) {
-            throw new CommandDoesNotExistsException(sprintf('The CLI command "%s" does not exist.', $commandName));
+            throw new CommandDoesNotExistException(sprintf('The CLI command "%s" does not exist.', $commandName));
         }
         return $this->commands[$commandName];
     }

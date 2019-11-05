@@ -82,7 +82,7 @@ class Quicksort extends AbstractSortingAlgorithm {
     }
     
     /**
-     * Sorts an array using the quicksort algorithm.
+     * Sorts an array using the Quicksort algorithm.
      * 
      * @see http://alienryderflex.com/quicksort/
      * 
@@ -90,7 +90,7 @@ class Quicksort extends AbstractSortingAlgorithm {
      * @param callable|null $comparator Comparator function of NULL if the default comparator should be used.
      * @param bool $arrayIsAlready0BasedWithLinearIndices TRUE if it is known that the array is already 0-based with linear indices
      *                                                                                       (i.e. a standard non-associative array), FALSE otherwise.
-     * @return boid
+     * @return void
      * @throws \InvalidArgumentException If the given $comparator is not NULL and is not a callable.
      */
     protected function quicksort(&$array, $comparator = NULL, $arrayIsAlready0BasedWithLinearIndices = FALSE) {

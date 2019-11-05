@@ -28,6 +28,7 @@
 namespace Norma\MVC\Routing\Constraint\Parsing;
 
 use Norma\MVC\Routing\Constraint\RequestRouteConstraintFactoryInterface;
+use Norma\MVC\Routing\Constraint\RequestRouteConstraintsFactoryInterface;
 use Norma\MVC\Routing\Constraint\RequestRouteConstraintsInterface;
 
 /**
@@ -43,32 +44,33 @@ class RequestRouteConstraintsParser implements RequestRouteConstraintsParserInte
     protected $requestRouteConstraintFactory;
     
     /**
-     * @var RequestRouteConstraintsInterface
+     * @var RequestRouteConstraintsFactoryInterface
      */
-    protected $requestRouteConstraints;
+    protected $requestRouteConstraintsFactory;
     
     /**
      * Constructs a new request route constraints parser.
      * 
-     * @param RequestRouteConstraintFactoryInterface $requestRouteConstraintFactory A request route constraints factory to use to construct constraints.
-     * @param RequestRouteConstraintsInterface $requestRouteConstraints The collection of request route constraints.
+     * @param RequestRouteConstraintFactoryInterface $requestRouteConstraintFactory A request route constraint factory to use to create a new constraint.
+     * @param RequestRouteConstraintsFactoryInterface $requestRouteConstraintsFactory A request route constraints factory to use to construct the request route constraints.
      */
-    public function __construct(RequestRouteConstraintFactoryInterface $requestRouteConstraintFactory, RequestRouteConstraintsInterface $requestRouteConstraints) {
+    public function __construct(RequestRouteConstraintFactoryInterface $requestRouteConstraintFactory, RequestRouteConstraintsFactoryInterface $requestRouteConstraintsFactory) {
         $this->requestRouteConstraintFactory = $requestRouteConstraintFactory;
-        $this->requestRouteConstraints = $requestRouteConstraints;
+        $this->requestRouteConstraintsFactory = $requestRouteConstraintsFactory;
     }
     
     /**
      * {@inheritdoc}
      */
     public function parse($constraints): RequestRouteConstraintsInterface {
+        $requestRouteConstraints = $this->requestRouteConstraintsFactory->make();
         if (!is_null($constraints)) {
             foreach ($constraints as $constraintName => $constraintData) {
                 $constraint = $this->requestRouteConstraintFactory->makeConstraint($constraintName, $constraintData);
-                $this->requestRouteConstraints->add($constraint);
+                $requestRouteConstraints->add($constraint);
             }
         }
-        return $this->requestRouteConstraints;
+        return $requestRouteConstraints;
     }
 
 }

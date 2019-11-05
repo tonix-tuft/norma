@@ -36,7 +36,7 @@ use Norma\Data\Structure\ListCollection\ListNodeInterface;
  *
  * @author Anton Bagdatyev (Tonix-Tuft) <antonytuft@gmail.com>
  */
-class LinkedObjectMap implements ObjectMapInterface, \ArrayAccess {
+class LinkedObjectMap implements ObjectMapInterface {
     
     /**
      * @var \SplObjectStorage

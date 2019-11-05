@@ -28,6 +28,7 @@
 namespace Norma\MVC\Routing\Constraint;
 
 use Norma\MVC\Routing\RoutingException;
+use Norma\MVC\Routing\Constraint\RequestRouteConstraintInterface;
 
 /**
  * The implementation of a request route constraint factory.
@@ -39,7 +40,7 @@ class RequestRouteConstraintFactory implements RequestRouteConstraintFactoryInte
     /**
      * {@inheritdoc}
      */
-    public function makeConstraint($constraintName, $constraintData) {
+    public function makeConstraint($constraintName, $constraintData): RequestRouteConstraintInterface {
         switch ($constraintName) {
             case 'method':
                 return new RequestRouteRequestMethodConstraint($constraintData);

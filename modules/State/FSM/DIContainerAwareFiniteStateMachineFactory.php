@@ -101,7 +101,7 @@ class DIContainerAwareFiniteStateMachineFactory implements FiniteStateMachineFac
              * 
              * @param string|StateInterface $initialState The initial state of the state machine.
              * @param AbstractDependencyInjectionContainer $container The DI container.
-             * @param $cacheStates Whether or not to cache states within the DI container.
+             * @param bool $cacheStates Whether or not to cache states within the DI container.
              */
             public function __construct($initialState, AbstractDependencyInjectionContainer $container, $cacheStates = TRUE) {
                 $this->container = $container;

@@ -135,7 +135,7 @@ abstract class AbstractGraph implements GraphInterface {
      *                                                                                     this callback MUST be called with the given parameters, in order: the edge, the source and target vertices.
      *                                                                                     Its return value is expected to be an integer to use for identifying the max or min edge to keep, depending on the mode.
      * @return void
-     * @throws \UnexpectedValueException If either the weight of an edge is not an int and there isnt't an `$edgeWeightToIntegerCallback` set or the return value of the callback is not an int.
+     * @throws \UnexpectedValueException If either the weight of an edge is not an int and there isn't an `$edgeWeightToIntegerCallback` set or the return value of the callback is not an int.
      */
     abstract protected function addCollapsedEdgeToSkeleton(GraphInterface $skeleton, VertexInterface $vertex1, VertexInterface $vertex2, $skeletonKeepEdgeMode = GraphInterface::SKELETON_MODE_KEEP_MAX_EDGE, $edgeWeightToIntegerCallback = NULL);
     

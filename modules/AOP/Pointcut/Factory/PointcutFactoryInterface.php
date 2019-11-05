@@ -25,17 +25,24 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Norma\AOP\Pointcut;
+namespace Norma\AOP\Pointcut\Factory;
 
-use Norma\AOP\Pointcut\AbstractAnnotatedPointcut;
+use Norma\AOP\Pointcut\PointcutInterface;
+use Norma\Algorithm\Parsing\ASTInterface;
 
 /**
- * Annotated method execution pointcut.
- *
+ * The interface of a pointcut factory.
+ * 
  * @author Anton Bagdatyev (Tonix-Tuft) <antonytuft@gmail.com>
  */
-class AnnotatedMethodExecutionPointcut extends AbstractAnnotatedPointcut {
+interface PointcutFactoryInterface {
     
-    // TODO
+    /**
+     * Makes a new pointcut from the Abstract Syntax Tree which represents it.
+     * 
+     * @param ASTInterface $AST The AST representing the pointcut.
+     * @return PointcutInterface The pointcut.
+     */
+    public function makePointcutFromAST(ASTInterface $AST): PointcutInterface;
     
 }

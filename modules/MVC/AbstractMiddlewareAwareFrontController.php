@@ -235,7 +235,7 @@ abstract class AbstractMiddlewareAwareFrontController implements FrontController
                         if (!empty($partiallyUnmatchedRoutes)) {
                             foreach ($partiallyUnmatchedRoutes as $route) {
                                 $routeConstraint = $this->router->getUnsatisfiedConstraintForRoute($route);
-                                if (!empty($routeConstraint)) {
+                                if ($routeConstraint instanceof RequestRouteConstraintInterface) {
                                     $executeLayerWhenNoMatchingRoute = false;
                                     
                                     // Norma's middleware layer 6.

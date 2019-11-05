@@ -25,46 +25,44 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Norma\Data\Structure\Map;
+namespace Norma\Algorithm\Parsing;
+
+use Norma\Algorithm\Parsing\ParsingException;
+use Norma\Algorithm\Parsing\ASTInterface;
+use Norma\Algorithm\Parsing\ParseTreeInterface;
 
 /**
- * The interface of a map which maps objects to data.
+ * The interface of a parsing algorithm.
  *
  * @author Anton Bagdatyev (Tonix-Tuft) <antonytuft@gmail.com>
  */
-interface ObjectMapInterface extends \Countable, \ArrayAccess, \Iterator {
+interface ParsingInterface {
     
     /**
-     * Map an object to data.
+     * Step through the parsing algorithm with the given lookahead terminal token information.
      * 
-     * @param object $object The object key.
-     * @param mixed $data The data.
+     * @param int $lookaheadTerminalTokenIdentifier The identifier of the lookahead terminal token.
+     * @param string $lookaheadTerminalTokenLexeme The lookahead terminal token lexeme.
+     * @param int $lookaheadTerminalTokenPos The position of the lookahead terminal token.
      * @return void
+     * @throws ParsingException If a parsing error occurs.
      */
-    public function set($object, $data);
+    public function step(int $lookaheadTerminalTokenIdentifier, string $lookaheadTerminalTokenLexeme, int $lookaheadTerminalTokenPos);
     
     /**
-     * Retrieves the data mapped by an object from the map.
+     * Generate the AST (Abstract Syntax Tree) of the so far parsed input.
      * 
-     * @param object $object The object key.
-     * @return mixed The data or NULL if the key with the given object key does not exist.
+     * @return ASTInterface The AST.
+     * @throws ParsingException If the AST cannot be generated for some reason.
      */
-    public function get($object);
+    public function generateAST(): ASTInterface;
     
     /**
-     * Tests if the map has the given object as key.
+     * Generate the parse tree of the so far parsed input.
      * 
-     * @param object $object The object key to test.
-     * @return bool TRUE if the object key exists in the map, FALSE otherwise.
+     * @return ParseTreeInterface The parse tree.
+     * @throws ParsingException If the parse tree cannot be generated for some reason.
      */
-    public function has($object);
-    
-    /**
-     * Removes an entry from the map given an object key.
-     * 
-     * @param object $object The object.
-     * @return void
-     */
-    public function remove($object);
+    public function generateParseTree(): ParseTreeInterface;
     
 }

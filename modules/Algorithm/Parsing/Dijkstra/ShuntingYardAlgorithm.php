@@ -25,17 +25,19 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Norma\AOP\Pointcut;
-
-use Norma\AOP\Pointcut\AbstractAnnotatedPointcut;
+namespace Algorithm\Parsing\Dijkstra;
 
 /**
- * Annotated method execution pointcut.
+ * Edsger Dijkstra's Shunting-yard algorithm implementation.
+ * 
+ * @see https://en.wikipedia.org/wiki/Shunting-yard_algorithm
+ * @see https://brilliant.org/wiki/shunting-yard-algorithm/
  *
  * @author Anton Bagdatyev (Tonix-Tuft) <antonytuft@gmail.com>
  */
-class AnnotatedMethodExecutionPointcut extends AbstractAnnotatedPointcut {
+class ShuntingYardAlgorithm implements OperatorPrecedenceParsingAlgorithm {
     
     // TODO
+    
     
 }

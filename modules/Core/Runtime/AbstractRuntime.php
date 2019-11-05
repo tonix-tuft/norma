@@ -182,7 +182,7 @@ abstract class AbstractRuntime implements RuntimeInterface {
         /*
          * As soon as there's the container, the AOP layer is configured.
          */
-        $this->configureAOPLayer($container);
+        $this->configureAOPLayerIfEnabled($container);
         /*** /2. ***/
         
         /*** 3. Middlewares bootstrap process ***/
@@ -328,6 +328,19 @@ abstract class AbstractRuntime implements RuntimeInterface {
             foreach ($middlewaresConfig as $middlewareLayerCode => $middlewares) {
                 $middlewareLayer->register($middlewareLayerCode, $middlewares, $override);
             }
+        }
+    }
+
+    /**
+     * Configures the AOP layer of the application if it is enabled.
+     * 
+     * @param AbstractDependencyInjectionContainer $container The DI container.
+     * @return void
+     */
+    protected function configureAOPLayerIfEnabled(AbstractDependencyInjectionContainer $container) {
+        $AOPLayerIsEnabled = $this->env->get('NORMA_AOP_ENABLED');
+        if ($AOPLayerIsEnabled) {
+            $this->configureAOPLayer($container);
         }
     }
     

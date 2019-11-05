@@ -25,17 +25,38 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Norma\AOP\Pointcut;
-
-use Norma\AOP\Pointcut\AbstractAnnotatedPointcut;
+namespace Norma\Data\Structure\Tree\Trie;
 
 /**
- * Annotated method execution pointcut.
+ * The interface of a trie node.
+ * 
+ * Implementors MUST assure that array access operations on this objects are bound to the trie tree
+ * which created the trie node represented by this interface.
  *
  * @author Anton Bagdatyev (Tonix-Tuft) <antonytuft@gmail.com>
  */
-class AnnotatedMethodExecutionPointcut extends AbstractAnnotatedPointcut {
+interface TrieNodeInterface extends \ArrayAccess {
     
-    // TODO
+    /**
+     * Gets the value of the trie node.
+     * 
+     * @return mixed The value of the trie node. `NULL` MUST be returned in case no value has been set on the trie node.
+     */
+    public function getValue();
+    
+    /**
+     * Sets the value of the trie node.
+     * 
+     * @param mixed $value The value of the trie node.
+     * @return void
+     */
+    public function setValue($value);
+    
+    /**
+     * Tests if the trie node is a leaf node.
+     * 
+     * @return bool TRUE if it is a leaf, FALSE otherwise.
+     */
+    public function isLeaf();
     
 }

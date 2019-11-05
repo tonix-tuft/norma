@@ -25,13 +25,13 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Norma\CLI;
+namespace Norma\Algorithm\Parsing\Grammar;
 
 use Norma\Core\Oops\AbstractException;
 
 /**
- * An exception to throw when a command does not exists.
+ * An exception to throw when the grammar of a parser is invalid.
  *
  * @author Anton Bagdatyev (Tonix-Tuft) <antonytuft@gmail.com>
  */
-class CommandDoesNotExistsException extends AbstractException {}
+class InvalidParserGrammarException extends AbstractException {}

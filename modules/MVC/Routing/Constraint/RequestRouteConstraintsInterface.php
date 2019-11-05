@@ -28,7 +28,7 @@
 namespace Norma\MVC\Routing\Constraint;
 
 /**
- * Interface of a request route constraints parser.
+ * Interface of request route constraints.
  *
  * @author Anton Bagdatyev (Tonix-Tuft) <antonytuft@gmail.com>
  */

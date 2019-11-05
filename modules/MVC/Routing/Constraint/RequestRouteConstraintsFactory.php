@@ -25,17 +25,25 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Norma\AOP\Pointcut;
+namespace Norma\MVC\Routing\Constraint;
 
-use Norma\AOP\Pointcut\AbstractAnnotatedPointcut;
+use Norma\MVC\Routing\Constraint\RequestRouteConstraintsInterface;
+use Norma\MVC\Routing\Constraint\RequestRouteConstraints;
 
 /**
- * Annotated method execution pointcut.
+ * Interface of a request route constraints factory.
  *
  * @author Anton Bagdatyev (Tonix-Tuft) <antonytuft@gmail.com>
  */
-class AnnotatedMethodExecutionPointcut extends AbstractAnnotatedPointcut {
+class RequestRouteConstraintsFactory implements RequestRouteConstraintsFactoryInterface {
     
-    // TODO
+    /**
+     * Makes a new instance of request route constraints.
+     * 
+     * @return RequestRouteConstraintInterface The constraints.
+     */
+    public function make(): RequestRouteConstraintsInterface {
+        return new RequestRouteConstraints();
+    }
     
 }

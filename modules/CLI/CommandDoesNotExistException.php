@@ -25,17 +25,13 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Norma\AOP\Pointcut;
+namespace Norma\CLI;
 
-use Norma\AOP\Pointcut\AbstractAnnotatedPointcut;
+use Norma\Core\Oops\AbstractException;
 
 /**
- * Annotated method execution pointcut.
+ * An exception to throw when a command does not exist.
  *
  * @author Anton Bagdatyev (Tonix-Tuft) <antonytuft@gmail.com>
  */
-class AnnotatedMethodExecutionPointcut extends AbstractAnnotatedPointcut {
-    
-    // TODO
-    
-}
+class CommandDoesNotExistException extends AbstractException {}
