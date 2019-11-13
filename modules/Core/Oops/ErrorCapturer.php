@@ -85,7 +85,7 @@ class ErrorCapturer implements ErrorCapturerInterface {
              * 
              * @see https://stackoverflow.com/questions/8440439/safely-catch-a-allowed-memory-size-exhausted-error-in-php#answer-27581958
              */
-            static::$emergencyMemory = str_repeat('*', 1024 * 1024);
+            static::$emergencyMemory = new \SplFixedArray(65536); // 65536 * 16 bytes = 1048576 bytes = 1 MB
         }
         
         $this->previousErrorHandler = set_error_handler([$this, 'handleErrorTakingPreviousIntoAccount']);
