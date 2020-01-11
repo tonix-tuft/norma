@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (c) 2019 Anton Bagdatyev (Tonix-Tuft)
+ * Copyright (c) 2020 Anton Bagdatyev (Tonix-Tuft)
  * 
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -46,9 +46,7 @@ trait FrameworkArrayUtilsTrait {
         $iterator = new \RecursiveIteratorIterator(new \RecursiveArrayIterator($array), \RecursiveIteratorIterator::CHILD_FIRST);
         $iterator->rewind();
         $res = [];
-        $j = 0;
         foreach ($iterator as $v) {
-            $j++;
             $depth = $iterator->getDepth();
             for ($path = [], $i = 0, $z = $depth; $i <= $z; $i++) {
                 $path[] = $iterator->getSubIterator($i)->key();

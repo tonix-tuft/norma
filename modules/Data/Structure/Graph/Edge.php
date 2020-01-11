@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (c) 2019 Anton Bagdatyev (Tonix-Tuft)
+ * Copyright (c) 2020 Anton Bagdatyev (Tonix-Tuft)
  * 
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
