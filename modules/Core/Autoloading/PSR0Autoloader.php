@@ -15,7 +15,7 @@ namespace Norma\Core\Autoloading;
  * 
  * Original class name was `SplClassLoader`. Renamed in `PSR0Autoloader`.
  * 
- * @fork Tonix-Tuft <antonytuft@gmail.com>
+ * @fork Anton Bagdatyev (Tonix) <antonytuft@gmail.com>
  * @source https://gist.github.com/lisachenko/1335891 Original source.
  *
  * @author Jonathan H. Wage <jonwage@gmail.com>
