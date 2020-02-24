@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (c) 2020 Anton Bagdatyev (Tonix-Tuft)
+ * Copyright (c) 2020 Anton Bagdatyev (Tonix)
  * 
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -33,6 +33,6 @@ use Norma\Core\Oops\AbstractException;
  * An exception to throw whenever there is an error during the execution of a parsing algorithm.
  * This exception MAY be used as a base class for more specific parsing exceptions.
  *
- * @author Anton Bagdatyev (Tonix-Tuft) <antonytuft@gmail.com>
+ * @author Anton Bagdatyev (Tonix) <antonytuft@gmail.com>
  */
 class ParsingException extends AbstractException {}

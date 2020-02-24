@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (c) 2020 Anton Bagdatyev (Tonix-Tuft)
+ * Copyright (c) 2020 Anton Bagdatyev (Tonix)
  * 
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -45,7 +45,7 @@ use Norma\Data\Structure\Graph\Edge;
  * An abstract graph base class which internally uses map data structures
  * to store vertices, their neighbors and the edges which connect them together.
  * 
- * @author Anton Bagdatyev (Tonix-Tuft) <antonytuft@gmail.com>
+ * @author Anton Bagdatyev (Tonix) <antonytuft@gmail.com>
  */
 abstract class AbstractGraph implements GraphInterface {
     

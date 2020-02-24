@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (c) 2020 Anton Bagdatyev (Tonix-Tuft)
+ * Copyright (c) 2020 Anton Bagdatyev (Tonix)
  * 
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -32,7 +32,7 @@ use Norma\HTTP\Response\StreamedResponseInterface;
 /**
  * The interface of an HTTP file download response which conforms with the PRS-7 specification.
  *
- * @author Anton Bagdatyev (Tonix-Tuft) <antonytuft@gmail.com>
+ * @author Anton Bagdatyev (Tonix) <antonytuft@gmail.com>
  */
 interface FileDownloadResponseInterface extends StreamedResponseInterface {
     

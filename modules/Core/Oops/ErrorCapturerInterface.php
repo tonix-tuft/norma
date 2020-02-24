@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (c) 2020 Anton Bagdatyev (Tonix-Tuft)
+ * Copyright (c) 2020 Anton Bagdatyev (Tonix)
  * 
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -31,7 +31,7 @@ namespace Norma\Core\Oops;
  * The interface of an error capturer which lets callers to set up callbacks which may handle uncaught exceptions,
  * runtime errors and fatal errors.
  *
- * @author Anton Bagdatyev (Tonix-Tuft) <antonytuft@gmail.com>
+ * @author Anton Bagdatyev (Tonix) <antonytuft@gmail.com>
  */
 interface ErrorCapturerInterface {
     

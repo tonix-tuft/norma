@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (c) 2020 Anton Bagdatyev (Tonix-Tuft)
+ * Copyright (c) 2020 Anton Bagdatyev (Tonix)
  * 
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -32,7 +32,7 @@ namespace Norma\Core\Oops;
  * 
  * @source http://php.net/manual/en/language.exceptions.php#91159
  * @author <ask at nilpo dot com> (http://php.net/manual/pl/language.exceptions.php#91159)
- * @author Anton Bagdatyev (Tonix-Tuft) <antonytuft@gmail.com>
+ * @author Anton Bagdatyev (Tonix) <antonytuft@gmail.com>
  */
 interface ExceptionInterface {
 

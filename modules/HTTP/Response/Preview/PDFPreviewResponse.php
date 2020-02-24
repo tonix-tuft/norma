@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (c) 2020 Anton Bagdatyev (Tonix-Tuft)
+ * Copyright (c) 2020 Anton Bagdatyev (Tonix)
  * 
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -42,7 +42,7 @@ use Norma\HTTP\Request\Server\ServerRequestInterface;
  * A class representing a simple HTTP response message which conforms with the PSR-7 specification
  * to send to a client able to preview the contents of a PDF file.
  *
- * @author Anton Bagdatyev (Tonix-Tuft) <antonytuft@gmail.com>
+ * @author Anton Bagdatyev (Tonix) <antonytuft@gmail.com>
  */
 class PDFPreviewResponse extends ByteRangeRequestAwareStreamedResponse implements PDFPreviewResponseInterface {
     

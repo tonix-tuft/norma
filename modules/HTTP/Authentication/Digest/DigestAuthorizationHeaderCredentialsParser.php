@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (c) 2020 Anton Bagdatyev (Tonix-Tuft)
+ * Copyright (c) 2020 Anton Bagdatyev (Tonix)
  * 
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -36,7 +36,7 @@ use Norma\HTTP\Authentication\AbstractAuthorizationHeaderCredentialsParser;
  *  
  *      Authorization: Digest username="bob", realm="members only", qop="auth", algorithm="MD5", uri="/digest_auth/test.html", nonce="5UImQA==3d76b2ab859e1770ec60ed285ec68a3e63028461", nc=00000001, cnonce="1672b410efa182c061c2f0a58acaa17d", response="3d9ebe6b9534a7135a3fde59a5a72668"
  *
- * @author Anton Bagdatyev (Tonix-Tuft) <antonytuft@gmail.com>
+ * @author Anton Bagdatyev (Tonix) <antonytuft@gmail.com>
  */
 class DigestAuthorizationHeaderCredentialsParser extends AbstractAuthorizationHeaderCredentialsParser {
     

@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (c) 2020 Anton Bagdatyev (Tonix-Tuft)
+ * Copyright (c) 2020 Anton Bagdatyev (Tonix)
  * 
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -36,7 +36,7 @@ use Norma\AOP\Pointcut\Parsing\State\Lexer\TokenStartState;
  * End state of lexer. A lexer in the following state has finished the lexical analysis of the current pointcut expression
  * and cannot perform a new one until its initial state is not resumed.
  *
- * @author Anton Bagdatyev (Tonix-Tuft) <antonytuft@gmail.com>
+ * @author Anton Bagdatyev (Tonix) <antonytuft@gmail.com>
  */
 class LexerEndState extends AbstractLexerState {
     

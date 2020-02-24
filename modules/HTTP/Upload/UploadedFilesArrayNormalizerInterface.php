@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (c) 2020 Anton Bagdatyev (Tonix-Tuft)
+ * Copyright (c) 2020 Anton Bagdatyev (Tonix)
  * 
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -31,7 +31,7 @@ namespace Norma\HTTP\Upload;
  * An interface which normalizes an array structure of uploaded files to an array of {@link \Norma\HTTP\Upload\UploadedFile}s,
  * as specified by PRS-7.
  *
- * @author Anton Bagdatyev (Tonix-Tuft) <antonytuft@gmail.com>
+ * @author Anton Bagdatyev (Tonix) <antonytuft@gmail.com>
  */
 interface UploadedFilesArrayNormalizerInterface {
     

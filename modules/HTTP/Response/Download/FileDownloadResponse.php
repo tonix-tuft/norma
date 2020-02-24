@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (c) 2020 Anton Bagdatyev (Tonix-Tuft)
+ * Copyright (c) 2020 Anton Bagdatyev (Tonix)
  * 
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -42,7 +42,7 @@ use Norma\HTTP\Request\Server\ServerRequestInterface;
  * @source https://stackoverflow.com/questions/8485886/force-file-download-with-php-using-header#answer-8485963
  *
  * @author Lawrence Cherone
- * @author Anton Bagdatyev (Tonix-Tuft) <antonytuft@gmail.com>
+ * @author Anton Bagdatyev (Tonix) <antonytuft@gmail.com>
  */
 class FileDownloadResponse extends ByteRangeRequestAwareStreamedResponse implements FileDownloadResponseInterface {
     

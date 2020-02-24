@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (c) 2020 Anton Bagdatyev (Tonix-Tuft)
+ * Copyright (c) 2020 Anton Bagdatyev (Tonix)
  * 
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -45,7 +45,7 @@ use Norma\Middleware\MiddlewareLayerExecutorTrait;
  * Other components should not set the container as a dependency but should declare their dependencies explicitly
  * in the constructor, in their methods (MVC controllers) or eventually using Norma annotations.
  *
- * @author Anton Bagdatyev (Tonix-Tuft) <antonytuft@gmail.com>
+ * @author Anton Bagdatyev (Tonix) <antonytuft@gmail.com>
  */
 abstract class AbstractMiddlewareAwareFrontController implements FrontControllerInterface {
     

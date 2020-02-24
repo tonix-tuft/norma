@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (c) 2020 Anton Bagdatyev (Tonix-Tuft)
+ * Copyright (c) 2020 Anton Bagdatyev (Tonix)
  * 
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -36,7 +36,7 @@ use Norma\HTTP\HTTPException;
  *
  * @author <danbrown AT php DOT net> (http://php.net/manual/en/features.file-upload.errors.php#89374)
  * @author Thalent, Michiel Thalen (http://php.net/manual/en/features.file-upload.errors.php#89374)
- * @author Anton Bagdatyev (Tonix-Tuft) <antonytuft@gmail.com>
+ * @author Anton Bagdatyev (Tonix) <antonytuft@gmail.com>
  */
 class FileUploadException extends HTTPException {
 
