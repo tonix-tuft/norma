@@ -27,8 +27,8 @@
 
 namespace Norma\AOP\Pointcut\Parsing\State\Parser;
 
-use Norma\State\FSM\StateInterface;
-use Norma\State\FSM\DistributedTransitionLogicFiniteStateMachineInterface;
+use StatusQuo\FSM\State\StateInterface;
+use StatusQuo\FSM\DistributedTransitionLogicFiniteStateMachineInterface;
 
 /**
  * New token to parse parser's state.

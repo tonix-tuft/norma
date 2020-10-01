@@ -27,7 +27,7 @@
 
 namespace Norma\AOP\Pointcut\Parsing\State\Lexer;
 
-use Norma\State\FSM\DistributedTransitionLogicFiniteStateMachineInterface;
+use StatusQuo\FSM\DistributedTransitionLogicFiniteStateMachineInterface;
 use Norma\AOP\Pointcut\Parsing\State\Lexer\LexerEndState;
 use Norma\AOP\Pointcut\Parsing\PointcutParsingException;
 

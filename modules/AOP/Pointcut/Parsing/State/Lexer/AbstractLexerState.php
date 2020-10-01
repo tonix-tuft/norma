@@ -27,8 +27,8 @@
 
 namespace Norma\AOP\Pointcut\Parsing\State\Lexer;
 
-use Norma\State\FSM\StateInterface;
-use Norma\State\FSM\DistributedTransitionLogicFiniteStateMachineInterface;
+use StatusQuo\FSM\State\StateInterface;
+use StatusQuo\FSM\DistributedTransitionLogicFiniteStateMachineInterface;
 use Norma\Core\Utils\FrameworkArrayUtilsTrait;
 use Norma\AOP\Pointcut\Parsing\TokenTypeEnum;
 use Norma\AOP\Pointcut\Parsing\PointcutParsingException;

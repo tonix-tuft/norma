@@ -33,11 +33,11 @@ use Norma\AOP\Pointcut\Parsing\State\Lexer\TokenStartState;
 use Norma\AOP\Pointcut\Parsing\State\Parser\NewTokenToParseState;
 use Norma\AOP\Pointcut\Parsing\TokenTypeEnum;
 use Norma\AOP\Pointcut\PointcutInterface;
-use Norma\State\FSM\FiniteStateMachineFactoryInterface;
-use Norma\State\FSM\FiniteStateMachineInterface;
+use Norma\AOP\Pointcut\Factory\PointcutFactoryInterface;
 use Norma\Algorithm\Parsing\ParsingInterface;
 use Norma\Algorithm\Parsing\ASTInterface;
-use Norma\AOP\Pointcut\Factory\PointcutFactoryInterface;
+use StatusQuo\FSM\Factory\FiniteStateMachineFactoryInterface;
+use StatusQuo\FSM\FiniteStateMachineInterface;
 
 /**
  * The implementation of a pointcut parser.
@@ -110,7 +110,7 @@ class PointcutExpressionParser implements PointcutExpressionParserInterface {
         });
         
         $parser->onData('token', function($token) use ($lexer, $that) {
-            if ($token['type'] !== TokenTypeEnum::TOKEN_WHITESPACE) {
+            if (!empty($token['type']) && $token['type'] !== TokenTypeEnum::TOKEN_WHITESPACE) {
                 $lexer->setData('last_non_whitespace_token_before_current', $token);
                 $that->processToken($token);
             }

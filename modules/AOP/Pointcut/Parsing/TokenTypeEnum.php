@@ -109,7 +109,7 @@ abstract class TokenTypeEnum {
     const TOKEN_NAMESPACE_IDENTIFIER_PLUS_OPERATOR = 14;
     
     /**
-     * Single wildcard token (`*`).
+     * Wildcard token (`*`).
      */
     const TOKEN_WILDCARD = 15;
     

@@ -173,8 +173,7 @@ abstract class AbstractArrayParserGrammar implements ParserGrammarInterface {
         
         // TODO
         var_dump($rules);
-        
-        exit;
+        // exit; // TODO: exit
         
         return [];
     }

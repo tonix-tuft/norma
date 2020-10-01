@@ -83,7 +83,8 @@ class ShiftReduceParsing implements ParsingInterface {
      * {@inheritdoc}
      */
     public function generateAST(): ASTInterface {
-        // TODO
+        // TODO: exit
+        exit();
     }
     
     /**

@@ -28,7 +28,7 @@
 namespace Norma\AOP\Pointcut\Parsing\State\Lexer;
 
 use Norma\AOP\Pointcut\Parsing\State\Lexer\AbstractLexerState;
-use Norma\State\FSM\DistributedTransitionLogicFiniteStateMachineInterface;
+use StatusQuo\FSM\DistributedTransitionLogicFiniteStateMachineInterface;
 use Norma\AOP\Pointcut\Parsing\State\Lexer\Regex\LexerTokenRegex;
 use Norma\AOP\Pointcut\Parsing\TokenTypeEnum;
 use Norma\AOP\Pointcut\Parsing\State\Lexer\TokenStartState;
