@@ -48,10 +48,10 @@ abstract class AbstractException extends \Exception implements ExceptionInterfac
      * 
      * @source https://gist.github.com/abtris/1437966
      * 
-     * @param \Throwable $e
+     * @param \Throwable $e The throwable.
      * @return string The string representation of the stack trace.
      */
-    public static function traceAsStr(\Throwable $e) {
+    public static function traceAsStr($e) {
         $rtn = "";
         $count = 0;
         foreach ($e->getTrace() as $frame) {
