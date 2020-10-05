@@ -45,11 +45,11 @@ class WebApplicationRuntime extends AbstractRuntime {
      * {@inheritdoc}
      */
     protected function onContainerConfigured(AbstractDependencyInjectionContainer $container) {
-        // Routing configuration.
-        $this->configureRouting($container);
-        
         // Web application middlewares configuration.
         $this->configureWebApplicationMiddlewares($container);
+
+        // Routing configuration.
+        $this->configureRouting($container);
     }
 
     /**
