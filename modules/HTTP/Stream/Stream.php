@@ -185,10 +185,12 @@ class Stream implements StreamInterface {
                 SEEK_END => 'SEEK_END'
             ];
             throw new \RuntimeException(
-                    sprintf('fseek(%3$s): Error while seeking within stream using offset "%1$s" and whence "%2$s".'),
-                    $offset,
-                    (isset($fseekWhencesMap[$whence]) ? $fseekWhencesMap[$whence] : $whence),
-                    $fseek
+                sprintf(
+                  'fseek(%3$s): Error while seeking within stream using offset "%1$s" and whence "%2$s".',
+                  $offset,
+                  (isset($fseekWhencesMap[$whence]) ? $fseekWhencesMap[$whence] : $whence),
+                  $fseek
+                )
             );
         }
         return $fseek;
