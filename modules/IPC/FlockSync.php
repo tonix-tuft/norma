@@ -53,7 +53,7 @@ class FlockSync {
         if (flock($fp, $nonBlocking ? $exclusiveLockOperation | LOCK_NB : $exclusiveLockOperation)) {
             $closure = \Closure::bind(function() use (&$fp) {
                 if (is_resource($fp) && get_resource_type($fp) === 'file') {
-                    $this->unlockHandle();
+                    $this->unlockHandle($fp);
                 }
             }, $this, self::class);
             register_shutdown_function($closure);
