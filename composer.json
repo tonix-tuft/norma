@@ -18,12 +18,12 @@
   ],
   "type": "library",
   "require": {
-    "php": "^7.0",
+    "php": "^7.3 || ^8.0",
     "psr/http-message": "^1.0",
     "tonix-tuft/status-quo": "^1.0"
   },
   "require-dev": {
-    "phpunit/phpunit": "5.2.*"
+    "phpunit/phpunit": "^9.5"
   },
   "autoload": {
     "psr-4": {
